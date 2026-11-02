@@ -102,6 +102,38 @@
 
     <div id="message" role="status" aria-live="polite"></div>
 
+<section id="adminDashboard" hidden>
+  <hr>
+  <h2>إصدار هوية وظيفية</h2>
+
+  <form id="identityForm">
+    <label>الاسم الثلاثي بالعربية</label>
+    <input id="full_name_ar" required>
+
+    <label>الاسم باللغة الإنجليزية</label>
+    <input id="full_name_en" required dir="ltr">
+
+    <label>العنوان الوظيفي</label>
+    <input id="job_title" required>
+
+    <label>الدائرة</label>
+    <input id="directorate" required>
+
+    <label>مكان العمل</label>
+    <input id="workplace" required>
+
+    <label>رقم الهوية</label>
+    <input id="identity_number" required dir="ltr">
+
+    <label>تاريخ انتهاء الهوية</label>
+    <input id="expiry_date" type="date" required>
+
+    <button type="submit" id="issueButton">إصدار الهوية</button>
+  </form>
+
+  <div id="issueResult" aria-live="polite"></div>
+</section>
+
     <div class="notice">
       نظام تجريبي غير معتمد رسمياً من وزارة الصحة.
       لا تشارك بيانات الدخول مع أي شخص.
@@ -187,6 +219,8 @@ showMessage(
   "تم تسجيل الدخول والتحقق من صلاحية المشرف بنجاح.",
   "success"
 );
+
+document.getElementById("adminDashboard").hidden = false;
 
       } catch (error) {
         showMessage(error.message || "تعذر تسجيل الدخول.", "error");

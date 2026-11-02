@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة إدارة الهوية الوظيفية</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -139,7 +140,97 @@
       لا تشارك بيانات الدخول مع أي شخص.
     </div>
   </main>
+document.getElementById("identityForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
 
+  const issueButton = document.getElementById("issueButton");
+  const resultBox = document.getElementById("issueResult");
+
+  issueButton.disabled = true;
+  issueButton.textContent = "جارٍ إصدار الهوية...";
+  resultBox.textContent = "يرجى الانتظار...";
+
+  const employeeData = {
+    full_name_ar: document.getElementById("full_name_ar").value.trim(),
+    full_name_en: document.getElementById("full_name_en").value.trim(),
+    job_title: document.getElementById("job_title").value.trim(),
+    directorate: document.getElementById("directorate").value.trim(),
+    workplace: document.getElementById("workplace").value.trim(),
+    identity_number: document.getElementById("identity_number").value.trim(),
+    expiry_date: document.getElementById("expiry_date").value
+  };
+
+  try {
+    const { data, error } = await supabaseClient.functions.invoke(
+      "issue-identity",
+      { body: employeeData }
+    );
+
+    if (error) throw error;
+
+    if (!data?.success || !data?.qr_token) {
+      throw new Error(data?.message || "لم يتم إصدار الهوية.");
+    }
+
+    const verifyUrl =
+      "https://iraq-health-id-demo.github.io/iraqi-health-id-v2/verify.html?token=" +
+      encodeURIComponent(data.qr_token);
+
+    resultBox.replaceChildren();
+
+    const heading = document.createElement("h3");
+    heading.textContent = "تم إصدار الهوية بنجاح";
+    resultBox.appendChild(heading);
+
+    const identityText = document.createElement("p");
+    identityText.textContent =
+      "رقم الهوية: " + employeeData.identity_number;
+    resultBox.appendChild(identityText);
+
+    const qrContainer = document.createElement("div");
+    qrContainer.id = "issuedQR";
+    qrContainer.style.margin = "20px auto";
+    qrContainer.style.width = "180px";
+    resultBox.appendChild(qrContainer);
+
+    new QRCode(qrContainer, {
+      text: verifyUrl,
+      width: 180,
+      height: 180
+    });
+
+    const warning = document.createElement("p");
+    warning.textContent =
+      "احتفظ بصورة رمز QR بصورة آمنة. سيظهر رمز التحقق السري مرة واحدة فقط.";
+    resultBox.appendChild(warning);
+
+    const link = document.createElement("a");
+    link.href = verifyUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "فتح صفحة التحقق";
+    resultBox.appendChild(link);
+
+    const tokenButton = document.createElement("button");
+    tokenButton.type = "button";
+    tokenButton.textContent = "نسخ رابط التحقق";
+    tokenButton.onclick = async () => {
+      await navigator.clipboard.writeText(verifyUrl);
+      tokenButton.textContent = "تم نسخ الرابط";
+    };
+    resultBox.appendChild(tokenButton);
+
+    document.getElementById("identityForm").reset();
+
+  } catch (error) {
+    console.error("Issue identity error:", error);
+    resultBox.textContent =
+      "تعذر إصدار الهوية: " + (error.message || "خطأ غير معروف");
+  } finally {
+    issueButton.disabled = false;
+    issueButton.textContent = "إصدار الهوية";
+  }
+});
   <script>
     const SUPABASE_URL = "https://wdlaerlifmwyguyjzjew.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jmBRnMzDnF-LRWEj9jVoPA_ZtZQExou";

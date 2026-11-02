@@ -231,6 +231,91 @@ document.getElementById("identityForm").addEventListener("submit", async (event)
     issueButton.textContent = "إصدار الهوية";
   }
 });
+  // ربط نموذج إصدار الهوية
+document.getElementById("identityForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const issueButton = document.getElementById("issueButton");
+  const resultBox = document.getElementById("issueResult");
+
+  issueButton.disabled = true;
+  issueButton.textContent = "جارٍ إصدار الهوية...";
+  resultBox.textContent = "جارٍ الاتصال بالخادم...";
+
+  const employeeData = {
+    full_name_ar: document.getElementById("full_name_ar").value.trim(),
+    full_name_en: document.getElementById("full_name_en").value.trim(),
+    job_title: document.getElementById("job_title").value.trim(),
+    directorate: document.getElementById("directorate").value.trim(),
+    workplace: document.getElementById("workplace").value.trim(),
+    identity_number: document.getElementById("identity_number").value.trim(),
+    expiry_date: document.getElementById("expiry_date").value
+  };
+
+  try {
+    const { data, error } = await supabaseClient.functions.invoke(
+      "issue-identity",
+      { body: employeeData }
+    );
+
+    if (error) throw error;
+
+    if (!data || !data.success || !data.qr_token) {
+      throw new Error(data?.message || "لم يتم إصدار الهوية.");
+    }
+
+    const verifyUrl =
+      "https://iraq-health-id-demo.github.io/iraqi-health-id-v2/verify.html?token=" +
+      encodeURIComponent(data.qr_token);
+
+    resultBox.replaceChildren();
+
+    const heading = document.createElement("h3");
+    heading.textContent = "تم إصدار الهوية بنجاح";
+    resultBox.appendChild(heading);
+
+    const number = document.createElement("p");
+    number.textContent = "رقم الهوية: " + employeeData.identity_number;
+    resultBox.appendChild(number);
+
+    const qrContainer = document.createElement("div");
+    qrContainer.style.margin = "20px auto";
+    qrContainer.style.width = "180px";
+    resultBox.appendChild(qrContainer);
+
+    if (typeof QRCode === "undefined") {
+      throw new Error("مكتبة QR غير محملة. تحقق من إضافة مكتبة QRCode.");
+    }
+
+    new QRCode(qrContainer, {
+      text: verifyUrl,
+      width: 180,
+      height: 180
+    });
+
+    const link = document.createElement("a");
+    link.href = verifyUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "فتح صفحة التحقق";
+    resultBox.appendChild(link);
+
+    const warning = document.createElement("p");
+    warning.textContent =
+      "احتفظ برمز QR بأمان؛ رمز التحقق السري لا يمكن استعادته من قاعدة البيانات.";
+    resultBox.appendChild(warning);
+
+    document.getElementById("identityForm").reset();
+
+  } catch (error) {
+    console.error("Issue identity error:", error);
+    resultBox.textContent =
+      "تعذر إصدار الهوية: " + (error.message || "خطأ غير معروف");
+  } finally {
+    issueButton.disabled = false;
+    issueButton.textContent = "إصدار الهوية";
+  }
+});
   <script>
     const SUPABASE_URL = "https://wdlaerlifmwyguyjzjew.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jmBRnMzDnF-LRWEj9jVoPA_ZtZQExou";

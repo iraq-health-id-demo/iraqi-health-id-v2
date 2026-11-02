@@ -156,10 +156,37 @@
           throw new Error("تعذر الحصول على بيانات المستخدم.");
         }
 
-        showMessage(
-          "تم تسجيل الدخول بنجاح. يجري استكمال فحص صلاحية المشرف في الخطوة التالية.",
-          "success"
-        );
+        const { data: sessionData } =
+  await supabaseClient.auth.getSession();
+
+const accessToken = sessionData.session?.access_token;
+
+if (!accessToken) {
+  throw new Error("تعذر الحصول على جلسة الدخول.");
+}
+
+const { data: adminResult, error: adminError } =
+  await supabaseClient.functions.invoke("check-admin", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
+if (adminError) {
+  throw new Error("تعذر التحقق من صلاحيات المشرف.");
+}
+
+if (!adminResult?.authorized) {
+  await supabaseClient.auth.signOut();
+  throw new Error(
+    adminResult?.message || "هذا الحساب ليس مشرفاً نشطاً."
+  );
+}
+
+showMessage(
+  "تم تسجيل الدخول والتحقق من صلاحية المشرف بنجاح.",
+  "success"
+);
 
       } catch (error) {
         showMessage(error.message || "تعذر تسجيل الدخول.", "error");

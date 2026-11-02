@@ -134,11 +134,17 @@
           );
         }
       } catch (error) {
-        messageBox.textContent =
-          "تعذر الاتصال بخدمة التحقق. يرجى المحاولة لاحقاً.";
-        showResult("error", "خدمة التحقق غير متاحة حالياً");
-      }
-    }
+  console.error("Verification error:", error);
+
+  messageBox.textContent =
+    "تفاصيل الخطأ: " + (error.message || String(error));
+
+  showResult(
+    "error",
+    "تعذر إكمال التحقق",
+    error.message || String(error)
+  );
+}
 
     verifyIdentity();
   </script>

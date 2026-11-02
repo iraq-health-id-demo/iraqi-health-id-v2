@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#087e91">
+  <title>التحقق من الهوية الوظيفية</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: #f1f7f8;
+      font-family: Tahoma, Arial, sans-serif;
+      color: #173b48;
+    }
+    .card {
+      background: white;
+      width: 100%;
+      max-width: 440px;
+      padding: 32px 24px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 8px 35px #173b4815;
+    }
+    .logo {
+      width: 65px;
+      height: 65px;
+      margin: auto;
+      border-radius: 50%;
+      background: #e1f3f4;
+      color: #087e91;
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+    }
+    h2 { margin: 20px 0 8px; }
+    #message { line-height: 1.9; color: #637980; }
+    .status {
+      margin: 22px 0;
+      padding: 18px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+    .active { background: #e6f7ed; color: #167447; }
+    .invalid, .expired, .suspended, .error {
+      background: #fff0ef;
+      color: #a52d29;
+    }
+    .waiting { background: #edf4f7; color: #476773; }
+    .details {
+      font-size: 14px;
+      line-height: 2.2;
+      color: #536b74;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #087e91;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">✓</div>
+    <h2>التحقق من الهوية الوظيفية</h2>
+    <p id="message">جارٍ التحقق من رمز الهوية...</p>
+
+    <div id="status" class="status waiting">
+      يرجى الانتظار
+    </div>
+
+    <div id="details" class="details"></div>
+
+    <a href="./index.html">العودة إلى الصفحة الرئيسية</a>
+  </main>
+
+  <script>
+    // سنضع رابط مشروع Supabase الجديد هنا في الخطوة التالية.
+    const VERIFY_ENDPOINT =
+      "YOUR_SUPABASE_PROJECT_URL/functions/v1/verify-identity";
+
+    const token = new URLSearchParams(location.search).get("token");
+
+    const statusBox = document.getElementById("status");
+    const messageBox = document.getElementById("message");
+    const detailsBox = document.getElementById("details");
+
+    function showResult(status, message, details = "") {
+      statusBox.className = "status " + status;
+      statusBox.textContent = message;
+      detailsBox.textContent = details;
+    }
+
+    async function verifyIdentity() {
+      if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
+        messageBox.textContent = "تعذر التحقق من الهوية.";
+        showResult("invalid", "رمز التحقق مفقود أو غير صالح");
+        return;
+      }
+
+      try {
+        const response = await fetch(VERIFY_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token })
+        });
+
+        const result = await response.json();
+
+        if (result.valid && result.status === "active") {
+          messageBox.textContent =
+            "تم العثور على سجل الهوية والتحقق من صلاحيتها.";
+          showResult(
+            "active",
+            "✓ الهوية صالحة وفعالة",
+            "تاريخ الإصدار: " + result.issue_date +
+            "\nتاريخ الانتهاء: " + result.expiry_date
+          );
+        } else {
+          messageBox.textContent = "نتيجة التحقق من الهوية:";
+          const states = {
+            invalid: "invalid",
+            expired: "expired",
+            suspended: "suspended"
+          };
+          showResult(
+            states[result.status] || "error",
+            result.message || "تعذر إثبات صلاحية الهوية"
+          );
+        }
+      } catch (error) {
+        messageBox.textContent =
+          "تعذر الاتصال بخدمة التحقق. يرجى المحاولة لاحقاً.";
+        showResult("error", "خدمة التحقق غير متاحة حالياً");
+      }
+    }
+
+    verifyIdentity();
+  </script>
+</body>
+</html>

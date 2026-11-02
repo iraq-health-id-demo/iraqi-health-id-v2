@@ -1,410 +1,899 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة إدارة الهوية الوظيفية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة الهوية الوظيفية الصحية</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
+    :root {
+      --primary: #287f91;
+      --dark: #173f50;
+      --light: #e8f3f6;
+      --border: #d6e2e7;
+      --danger: #a93636;
+      --success: #246b45;
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      min-height: 100vh;
+      background: #edf3f5;
+      color: var(--dark);
       font-family: Tahoma, Arial, sans-serif;
-      background: linear-gradient(135deg, #e6f1f4, #d5e5eb);
+    }
+
+    header {
+      background: linear-gradient(120deg, #17495d, #3195a3);
+      color: white;
+      padding: 24px;
+      text-align: center;
+    }
+
+    header h1 { margin: 0 0 10px; font-size: 25px; }
+    header p { margin: 0; opacity: .85; }
+
+    .container {
+      width: min(1050px, 94%);
+      margin: 28px auto;
+    }
+
+    .panel {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 25px #193f5010;
+      margin-bottom: 22px;
+    }
+
+    .login-panel {
+      max-width: 440px;
+      margin: 35px auto;
+    }
+
+    h2 {
+      color: var(--dark);
+      margin-top: 0;
+      font-size: 21px;
+    }
+
+    h3 { color: var(--primary); }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+
+    input:focus {
+      outline: 2px solid #a6d7df;
+      border-color: var(--primary);
+    }
+
+    input[dir="ltr"] {
+      text-align: left;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 20px;
+      background: var(--primary);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover { filter: brightness(.94); }
+    button:disabled { opacity: .55; cursor: wait; }
+
+    .secondary { background: #617d89; }
+    .danger { background: var(--danger); }
+
+    .full-button { width: 100%; }
+
+    .hidden { display: none !important; }
+
+    .message {
+      padding: 13px;
+      margin-top: 16px;
+      border-radius: 8px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+      display: none;
+    }
+
+    .message.error {
+      display: block;
+      color: #8b2525;
+      background: #fff0f0;
+    }
+
+    .message.success {
+      display: block;
+      color: var(--success);
+      background: #eaf7ef;
+    }
+
+    .message.info {
+      display: block;
+      color: #24566a;
+      background: #eaf4f8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .field { min-width: 0; }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .actions button { flex: 1; }
+
+    .result {
+      margin-top: 25px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    #qrCode {
+      width: 200px;
+      min-height: 200px;
+      margin: 18px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #qrCode img, #qrCode canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .qr-note {
+      text-align: center;
+      color: #647984;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .card-area {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .employee-card {
+      width: 85.6mm;
+      height: 54mm;
+      min-width: 85.6mm;
+      position: relative;
+      overflow: hidden;
+      border-radius: 3mm;
+      background: linear-gradient(135deg, #e7f4f6, #c5e1e8);
+      border: 1px solid #9bbec9;
+      color: #163f52;
+      padding: 4mm;
+    }
+
+    .card-heading {
+      font-size: 10pt;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid #8fb7c2;
+      padding-bottom: 2mm;
+      margin-bottom: 3mm;
+    }
+
+    .card-body {
+      display: flex;
+      gap: 3mm;
+      align-items: flex-start;
+    }
+
+    .photo-placeholder {
+      width: 22mm;
+      height: 27mm;
+      flex-shrink: 0;
+      background: #d5e8ec;
+      border: 1px solid #8eb3bd;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      font-size: 8pt;
+      color: #567985;
+      text-align: center;
     }
-    .panel {
-      width: 100%;
-      max-width: 440px;
-      background: white;
-      padding: 35px 28px;
-      border-radius: 20px;
-      box-shadow: 0 12px 40px #23445520;
-    }
-    .logo {
-      width: 68px;
-      height: 68px;
-      margin: auto auto 18px;
-      border-radius: 50%;
-      background: #d9edf2;
-      color: #287b91;
-      display: grid;
-      place-items: center;
-      font-size: 32px;
-    }
-    h1 { text-align: center; font-size: 23px; color: #183e50; }
-    .subtitle { text-align: center; color: #71828b; line-height: 1.8; }
-    label { display: block; margin: 18px 0 7px; color: #294c5c; }
-    input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #cbd9df;
-      border-radius: 10px;
-      font-size: 16px;
-      direction: ltr;
-      text-align: left;
-    }
-    button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #287f91;
-      color: white;
-      font-size: 17px;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .6; cursor: wait; }
-    #message {
-      margin-top: 18px;
-      padding: 12px;
-      border-radius: 9px;
-      line-height: 1.7;
-      display: none;
+
+    .card-details {
+      font-size: 7.5pt;
+      line-height: 1.9;
       overflow-wrap: anywhere;
     }
-    .error { display: block !important; background: #fff0f0; color: #9a3030; }
-    .success { display: block !important; background: #eaf7ef; color: #23633c; }
-    .notice {
-      margin-top: 22px;
-      padding: 12px;
-      border-radius: 9px;
-      background: #f1f6f8;
-      color: #637781;
-      font-size: 12px;
-      line-height: 1.8;
+
+    .card-details strong { color: #14556a; }
+
+    .card-footer {
+      position: absolute;
+      bottom: 3mm;
+      right: 4mm;
+      left: 4mm;
       text-align: center;
+      font-size: 6.5pt;
+      border-top: 1px solid #9bbec9;
+      padding-top: 1.5mm;
+    }
+
+    .back-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .back-card .card-heading {
+      width: 100%;
+    }
+
+    #cardQR img, #cardQR canvas {
+      width: 25mm !important;
+      height: 25mm !important;
+    }
+
+    .back-card p {
+      font-size: 7pt;
+      margin: 2mm 0;
+    }
+
+    .experimental {
+      text-align: center;
+      color: #72848d;
+      font-size: 12px;
+      padding: 20px;
+    }
+
+    footer {
+      text-align: center;
+      color: #758791;
+      padding: 20px;
+      font-size: 12px;
+    }
+
+    @media(max-width: 650px) {
+      .grid { grid-template-columns: 1fr; }
+      .panel { padding: 18px; }
+      .cards { justify-content: flex-start; overflow-x: auto; }
+    }
+
+    @media print {
+      @page {
+        size: 85.6mm 54mm;
+        margin: 0;
+      }
+
+      body * { visibility: hidden !important; }
+
+      #printArea, #printArea * {
+        visibility: visible !important;
+      }
+
+      #printArea {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 85.6mm;
+      }
+
+      .employee-card {
+        width: 85.6mm;
+        height: 54mm;
+        border-radius: 0;
+        page-break-after: always;
+        break-after: page;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .employee-card:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
     }
   </style>
 </head>
+
 <body>
-  <main class="panel">
-    <div class="logo">✚</div>
-    <h1>لوحة إدارة الهوية الوظيفية</h1>
-    <p class="subtitle">نظام إدارة الهويات الوظيفية الصحية – النسخة التجريبية</p>
+
+<header>
+  <h1>نظام إدارة الهوية الوظيفية الصحية</h1>
+  <p>لوحة المشرف والإصدار الإلكتروني – V2</p>
+</header>
+
+<main class="container">
+
+  <!-- تسجيل الدخول -->
+  <section id="loginSection" class="panel login-panel">
+    <h2>تسجيل دخول المشرف</h2>
 
     <form id="loginForm">
-      <label for="email">البريد الإلكتروني للمشرف</label>
-      <input id="email" type="email" autocomplete="username"
-             placeholder="admin@example.com" required>
+      <label for="email">البريد الإلكتروني</label>
+      <input id="email" type="email" autocomplete="username" required>
 
       <label for="password">كلمة المرور</label>
       <input id="password" type="password"
              autocomplete="current-password" required>
 
-      <button id="loginButton" type="submit">تسجيل الدخول</button>
+      <button id="loginButton" class="full-button" type="submit">
+        تسجيل الدخول
+      </button>
     </form>
 
-    <div id="message" role="status" aria-live="polite"></div>
+    <div id="loginMessage" class="message" role="status"></div>
+  </section>
 
-<section id="adminDashboard" hidden>
-  <hr>
-  <h2>إصدار هوية وظيفية</h2>
+  <!-- لوحة الإدارة -->
+  <section id="adminDashboard" class="hidden">
 
-  <form id="identityForm">
-    <label>الاسم الثلاثي بالعربية</label>
-    <input id="full_name_ar" required>
-
-    <label>الاسم باللغة الإنجليزية</label>
-    <input id="full_name_en" required dir="ltr">
-
-    <label>العنوان الوظيفي</label>
-    <input id="job_title" required>
-
-    <label>الدائرة</label>
-    <input id="directorate" required>
-
-    <label>مكان العمل</label>
-    <input id="workplace" required>
-
-    <label>رقم الهوية</label>
-    <input id="identity_number" required dir="ltr">
-
-    <label>تاريخ انتهاء الهوية</label>
-    <input id="expiry_date" type="date" required>
-
-    <button type="submit" id="issueButton">إصدار الهوية</button>
-  </form>
-
-  <div id="issueResult" aria-live="polite"></div>
-</section>
-
-    <div class="notice">
-      نظام تجريبي غير معتمد رسمياً من وزارة الصحة.
-      لا تشارك بيانات الدخول مع أي شخص.
+    <div class="panel">
+      <h2>مرحباً بك في لوحة الإدارة</h2>
+      <p id="adminEmail"></p>
+      <div class="actions">
+        <button id="logoutButton" class="danger">تسجيل الخروج</button>
+      </div>
+      <div id="adminMessage" class="message" role="status"></div>
     </div>
-  </main>
-document.getElementById("identityForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
 
-  const issueButton = document.getElementById("issueButton");
-  const resultBox = document.getElementById("issueResult");
+    <!-- نموذج إصدار الهوية -->
+    <section class="panel">
+      <h2>إصدار هوية وظيفية جديدة</h2>
+      <p>أدخل بيانات الموظف التجريبية لإصدار هوية جديدة.</p>
 
-  issueButton.disabled = true;
-  issueButton.textContent = "جارٍ إصدار الهوية...";
-  resultBox.textContent = "يرجى الانتظار...";
+      <form id="identityForm">
 
-  const employeeData = {
-    full_name_ar: document.getElementById("full_name_ar").value.trim(),
-    full_name_en: document.getElementById("full_name_en").value.trim(),
-    job_title: document.getElementById("job_title").value.trim(),
-    directorate: document.getElementById("directorate").value.trim(),
-    workplace: document.getElementById("workplace").value.trim(),
-    identity_number: document.getElementById("identity_number").value.trim(),
-    expiry_date: document.getElementById("expiry_date").value
-  };
+        <div class="grid">
+          <div class="field">
+            <label for="full_name_ar">الاسم الثلاثي بالعربية</label>
+            <input id="full_name_ar" required maxlength="150">
+          </div>
 
-  try {
-    const { data, error } = await supabaseClient.functions.invoke(
-      "issue-identity",
-      { body: employeeData }
-    );
+          <div class="field">
+            <label for="full_name_en">الاسم باللغة الإنجليزية</label>
+            <input id="full_name_en" dir="ltr" required maxlength="150">
+          </div>
 
-    if (error) throw error;
+          <div class="field">
+            <label for="job_title">العنوان الوظيفي</label>
+            <input id="job_title" required maxlength="100">
+          </div>
 
-    if (!data?.success || !data?.qr_token) {
-      throw new Error(data?.message || "لم يتم إصدار الهوية.");
-    }
+          <div class="field">
+            <label for="directorate">الدائرة</label>
+            <input id="directorate" required maxlength="150">
+          </div>
 
-    const verifyUrl =
-      "https://iraq-health-id-demo.github.io/iraqi-health-id-v2/verify.html?token=" +
-      encodeURIComponent(data.qr_token);
+          <div class="field">
+            <label for="workplace">مكان العمل</label>
+            <input id="workplace" required maxlength="150">
+          </div>
 
-    resultBox.replaceChildren();
+          <div class="field">
+            <label for="identity_number">رقم الهوية</label>
+            <input id="identity_number" dir="ltr"
+                   required maxlength="50">
+          </div>
 
-    const heading = document.createElement("h3");
-    heading.textContent = "تم إصدار الهوية بنجاح";
-    resultBox.appendChild(heading);
+          <div class="field">
+            <label for="expiry_date">تاريخ انتهاء الهوية</label>
+            <input id="expiry_date" type="date" required>
+          </div>
+        </div>
 
-    const identityText = document.createElement("p");
-    identityText.textContent =
-      "رقم الهوية: " + employeeData.identity_number;
-    resultBox.appendChild(identityText);
+        <button id="issueButton" type="submit" class="full-button">
+          إصدار الهوية
+        </button>
 
-    const qrContainer = document.createElement("div");
-    qrContainer.id = "issuedQR";
-    qrContainer.style.margin = "20px auto";
-    qrContainer.style.width = "180px";
-    resultBox.appendChild(qrContainer);
+      </form>
 
-    new QRCode(qrContainer, {
-      text: verifyUrl,
-      width: 180,
-      height: 180
-    });
+      <div id="issueMessage" class="message" role="status"></div>
 
-    const warning = document.createElement("p");
-    warning.textContent =
-      "احتفظ بصورة رمز QR بصورة آمنة. سيظهر رمز التحقق السري مرة واحدة فقط.";
-    resultBox.appendChild(warning);
+      <!-- نتيجة الإصدار -->
+      <div id="issueResult" class="result hidden">
 
-    const link = document.createElement("a");
-    link.href = verifyUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = "فتح صفحة التحقق";
-    resultBox.appendChild(link);
+        <h3>تم إصدار الهوية</h3>
+        <p id="issuedNumber"></p>
 
-    const tokenButton = document.createElement("button");
-    tokenButton.type = "button";
-    tokenButton.textContent = "نسخ رابط التحقق";
-    tokenButton.onclick = async () => {
-      await navigator.clipboard.writeText(verifyUrl);
-      tokenButton.textContent = "تم نسخ الرابط";
-    };
-    resultBox.appendChild(tokenButton);
+        <div id="qrCode"></div>
 
-    document.getElementById("identityForm").reset();
+        <p class="qr-note">
+          رمز QR خاص بالتحقق من الهوية.
+          احتفظ به بأمان ولا تشاركه علناً.
+        </p>
 
-  } catch (error) {
-    console.error("Issue identity error:", error);
-    resultBox.textContent =
-      "تعذر إصدار الهوية: " + (error.message || "خطأ غير معروف");
-  } finally {
-    issueButton.disabled = false;
-    issueButton.textContent = "إصدار الهوية";
-  }
-});
-  // ربط نموذج إصدار الهوية
-document.getElementById("identityForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
+        <div class="actions">
+          <button type="button" id="copyLinkButton" class="secondary">
+            نسخ رابط التحقق
+          </button>
+          <button type="button" id="printButton">
+            طباعة وجهي الهوية
+          </button>
+        </div>
 
-  const issueButton = document.getElementById("issueButton");
-  const resultBox = document.getElementById("issueResult");
+        <!-- معاينة وجهي البطاقة -->
+        <div class="card-area">
+          <h3>معاينة الوجه الأمامي والخلفي</h3>
 
-  issueButton.disabled = true;
-  issueButton.textContent = "جارٍ إصدار الهوية...";
-  resultBox.textContent = "جارٍ الاتصال بالخادم...";
+          <div id="printArea" class="cards">
 
-  const employeeData = {
-    full_name_ar: document.getElementById("full_name_ar").value.trim(),
-    full_name_en: document.getElementById("full_name_en").value.trim(),
-    job_title: document.getElementById("job_title").value.trim(),
-    directorate: document.getElementById("directorate").value.trim(),
-    workplace: document.getElementById("workplace").value.trim(),
-    identity_number: document.getElementById("identity_number").value.trim(),
-    expiry_date: document.getElementById("expiry_date").value
-  };
+            <div class="employee-card" id="frontCard">
+              <div class="card-heading">
+                الهوية الوظيفية الصحية
+              </div>
 
-  try {
-    const { data, error } = await supabaseClient.functions.invoke(
-      "issue-identity",
-      { body: employeeData }
-    );
+              <div class="card-body">
+                <div class="photo-placeholder">
+                  صورة الموظف
+                </div>
 
-    if (error) throw error;
+                <div class="card-details">
+                  <div><strong>الاسم:</strong> <span id="cardNameAr"></span></div>
+                  <div><strong>Name:</strong> <span id="cardNameEn"></span></div>
+                  <div><strong>العنوان الوظيفي:</strong> <span id="cardJob"></span></div>
+                  <div><strong>الدائرة:</strong> <span id="cardDirectorate"></span></div>
+                  <div><strong>مكان العمل:</strong> <span id="cardWorkplace"></span></div>
+                  <div><strong>ID:</strong> <span id="cardIdentity"></span></div>
+                </div>
+              </div>
 
-    if (!data || !data.success || !data.qr_token) {
-      throw new Error(data?.message || "لم يتم إصدار الهوية.");
-    }
+              <div class="card-footer">
+                نموذج تجريبي غير معتمد رسمياً
+              </div>
+            </div>
 
-    const verifyUrl =
-      "https://iraq-health-id-demo.github.io/iraqi-health-id-v2/verify.html?token=" +
-      encodeURIComponent(data.qr_token);
+            <div class="employee-card back-card" id="backCard">
+              <div class="card-heading">
+                التحقق من الهوية الوظيفية
+              </div>
 
-    resultBox.replaceChildren();
+              <div id="cardQR"></div>
 
-    const heading = document.createElement("h3");
-    heading.textContent = "تم إصدار الهوية بنجاح";
-    resultBox.appendChild(heading);
+              <p>امسح الرمز للتحقق من حالة الهوية</p>
+              <p>تاريخ الانتهاء: <span id="cardExpiry"></span></p>
 
-    const number = document.createElement("p");
-    number.textContent = "رقم الهوية: " + employeeData.identity_number;
-    resultBox.appendChild(number);
+              <div class="card-footer">
+                نسخة تجريبية – لا تمثل اعتماداً حكومياً
+              </div>
+            </div>
 
-    const qrContainer = document.createElement("div");
-    qrContainer.style.margin = "20px auto";
-    qrContainer.style.width = "180px";
-    resultBox.appendChild(qrContainer);
+          </div>
+        </div>
 
-    if (typeof QRCode === "undefined") {
-      throw new Error("مكتبة QR غير محملة. تحقق من إضافة مكتبة QRCode.");
-    }
+      </div>
+    </section>
 
-    new QRCode(qrContainer, {
-      text: verifyUrl,
-      width: 180,
-      height: 180
-    });
+  </section>
 
-    const link = document.createElement("a");
-    link.href = verifyUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = "فتح صفحة التحقق";
-    resultBox.appendChild(link);
+  <div class="experimental">
+    هذا النظام نسخة تجريبية مستقلة، ولا يمثل نظاماً رسمياً معتمداً من وزارة الصحة.
+  </div>
 
-    const warning = document.createElement("p");
-    warning.textContent =
-      "احتفظ برمز QR بأمان؛ رمز التحقق السري لا يمكن استعادته من قاعدة البيانات.";
-    resultBox.appendChild(warning);
+</main>
 
-    document.getElementById("identityForm").reset();
+<footer>
+  نظام الهوية الوظيفية الصحية – الإصدار التجريبي V2
+</footer>
 
-  } catch (error) {
-    console.error("Issue identity error:", error);
-    resultBox.textContent =
-      "تعذر إصدار الهوية: " + (error.message || "خطأ غير معروف");
-  } finally {
-    issueButton.disabled = false;
-    issueButton.textContent = "إصدار الهوية";
-  }
-});
-  <script>
-    const SUPABASE_URL = "https://wdlaerlifmwyguyjzjew.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_jmBRnMzDnF-LRWEj9jVoPA_ZtZQExou";
+<script>
+"use strict";
 
-    const message = document.getElementById("message");
-    const button = document.getElementById("loginButton");
+/* إعداد الاتصال */
+const SUPABASE_URL =
+  "https://wdlaerlifmwyguyjzjew.supabase.co";
 
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = type;
-    }
+const SUPABASE_ANON_KEY =
+  "sb_publishable_jmBRnMzDnF-LRWEj9jVoPA_ZtZQExou";
 
-    const clientReady =
-      SUPABASE_ANON_KEY !== "ضع_مفتاح_Publishable_أو_anon_هنا";
+const VERIFY_PAGE =
+  "https://iraq-health-id-demo.github.io/iraqi-health-id-v2/verify.html";
 
-    let supabaseClient = null;
-
-    if (clientReady) {
-      supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-      );
-    }
-
-    document.getElementById("loginForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      if (!supabaseClient) {
-        showMessage("لم تتم إضافة مفتاح الاتصال العام بعد.", "error");
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "جارٍ تسجيل الدخول...";
-
-      try {
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-            email: document.getElementById("email").value.trim(),
-            password: document.getElementById("password").value
-          });
-
-        if (error) throw error;
-
-        if (!data.user) {
-          throw new Error("تعذر الحصول على بيانات المستخدم.");
-        }
-
-        const { data: sessionData } =
-  await supabaseClient.auth.getSession();
-
-const accessToken = sessionData.session?.access_token;
-
-if (!accessToken) {
-  throw new Error("تعذر الحصول على جلسة الدخول.");
-}
-
-const { data: adminResult, error: adminError } =
-  await supabaseClient.functions.invoke("check-admin", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  });
-
-if (adminError) {
-  throw new Error("تعذر التحقق من صلاحيات المشرف.");
-}
-
-if (!adminResult?.authorized) {
-  await supabaseClient.auth.signOut();
-  throw new Error(
-    adminResult?.message || "هذا الحساب ليس مشرفاً نشطاً."
-  );
-}
-
-showMessage(
-  "تم تسجيل الدخول والتحقق من صلاحية المشرف بنجاح.",
-  "success"
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
 );
 
-document.getElementById("adminDashboard").hidden = false;
+/* عناصر الصفحة */
+const loginSection = document.getElementById("loginSection");
+const dashboard = document.getElementById("adminDashboard");
+const loginMessage = document.getElementById("loginMessage");
+const adminMessage = document.getElementById("adminMessage");
+const issueMessage = document.getElementById("issueMessage");
+const issueResult = document.getElementById("issueResult");
 
-      } catch (error) {
-        showMessage(error.message || "تعذر تسجيل الدخول.", "error");
-      } finally {
-        button.disabled = false;
-        button.textContent = "تسجيل الدخول";
+let currentVerifyUrl = "";
+let currentEmployee = null;
+
+/* عرض الرسائل */
+function showMessage(element, text, type) {
+  element.textContent = text;
+  element.className = "message " + type;
+}
+
+/* عرض اللوحة */
+function showDashboard(email) {
+  loginSection.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  document.getElementById("adminEmail").textContent =
+    "حساب المشرف: " + (email || "");
+}
+
+/* إخفاء اللوحة */
+function hideDashboard() {
+  dashboard.classList.add("hidden");
+  loginSection.classList.remove("hidden");
+}
+
+/* فحص صلاحية المشرف من الخادم */
+async function checkAdminSession() {
+  const { data: sessionData, error: sessionError } =
+    await supabaseClient.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    hideDashboard();
+    return false;
+  }
+
+  const token = sessionData.session.access_token;
+
+  const { data, error } =
+    await supabaseClient.functions.invoke("check-admin", {
+      headers: {
+        Authorization: "Bearer " + token
       }
     });
-  </script>
+
+  if (error || !data || data.authorized !== true) {
+    await supabaseClient.auth.signOut();
+    hideDashboard();
+
+    showMessage(
+      loginMessage,
+      data?.message || "تعذر التحقق من صلاحية المشرف.",
+      "error"
+    );
+
+    return false;
+  }
+
+  showDashboard(sessionData.session.user.email);
+  return true;
+}
+
+/* تسجيل الدخول */
+document.getElementById("loginForm").addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
+
+    const button = document.getElementById("loginButton");
+    button.disabled = true;
+    button.textContent = "جارٍ تسجيل الدخول...";
+
+    try {
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if (error) throw error;
+      if (!data.user) throw new Error("لم يتم العثور على حساب المستخدم.");
+
+      const authorized = await checkAdminSession();
+
+      if (!authorized) {
+        throw new Error("الحساب غير مخول لإدارة الهويات.");
+      }
+
+      showMessage(
+        adminMessage,
+        "تم تسجيل الدخول والتحقق من صلاحية المشرف بنجاح.",
+        "success"
+      );
+
+    } catch (error) {
+      showMessage(
+        loginMessage,
+        error.message || "تعذر تسجيل الدخول.",
+        "error"
+      );
+    } finally {
+      button.disabled = false;
+      button.textContent = "تسجيل الدخول";
+    }
+  }
+);
+
+/* تسجيل الخروج */
+document.getElementById("logoutButton").addEventListener(
+  "click",
+  async function() {
+    await supabaseClient.auth.signOut();
+    hideDashboard();
+    document.getElementById("password").value = "";
+    showMessage(loginMessage, "تم تسجيل الخروج.", "info");
+  }
+);
+
+/* استعادة الجلسة عند تحديث الصفحة */
+async function restoreSession() {
+  try {
+    await checkAdminSession();
+  } catch (error) {
+    console.error("Session restoration error:", error);
+    hideDashboard();
+  }
+}
+
+/* إنشاء QR */
+function createQR(element, url, size) {
+  element.replaceChildren();
+
+  if (typeof QRCode === "undefined") {
+    throw new Error("تعذر تحميل مكتبة إنشاء QR.");
+  }
+
+  new QRCode(element, {
+    text: url,
+    width: size,
+    height: size,
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
+/* إصدار الهوية */
+document.getElementById("identityForm").addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
+
+    const button = document.getElementById("issueButton");
+
+    button.disabled = true;
+    button.textContent = "جارٍ إصدار الهوية...";
+    issueResult.classList.add("hidden");
+
+    showMessage(
+      issueMessage,
+      "جارٍ إرسال البيانات إلى خادم الإصدار...",
+      "info"
+    );
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabaseClient.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("انتهت جلسة الدخول. سجّل الدخول مجدداً.");
+      }
+
+      const employeeData = {
+        full_name_ar:
+          document.getElementById("full_name_ar").value.trim(),
+
+        full_name_en:
+          document.getElementById("full_name_en").value.trim(),
+
+        job_title:
+          document.getElementById("job_title").value.trim(),
+
+        directorate:
+          document.getElementById("directorate").value.trim(),
+
+        workplace:
+          document.getElementById("workplace").value.trim(),
+
+        identity_number:
+          document.getElementById("identity_number").value.trim(),
+
+        expiry_date:
+          document.getElementById("expiry_date").value
+      };
+
+      for (const [key, value] of Object.entries(employeeData)) {
+        if (!value) {
+          throw new Error("يرجى إكمال جميع الحقول المطلوبة.");
+        }
+      }
+
+      const { data, error } =
+        await supabaseClient.functions.invoke(
+          "issue-identity",
+          {
+            body: employeeData,
+            headers: {
+              Authorization:
+                "Bearer " + sessionData.session.access_token
+            }
+          }
+        );
+
+      if (error) {
+        console.error("Function invocation error:", error);
+        throw new Error(
+          "فشل الاتصال بخدمة إصدار الهوية. تحقق من نشر الوظيفة وصلاحياتها."
+        );
+      }
+
+      if (!data || data.success !== true || !data.qr_token) {
+        console.error("Unexpected issue response:", data);
+        throw new Error(
+          data?.message || "لم يرجع الخادم بيانات إصدار صحيحة."
+        );
+      }
+
+      /*
+        لا نعتمد verify_url القادم من الخادم هنا،
+        بل نربط الرمز بصفحة التحقق المنشورة على GitHub Pages.
+      */
+      currentVerifyUrl =
+        VERIFY_PAGE + "?token=" +
+        encodeURIComponent(data.qr_token);
+
+      currentEmployee = employeeData;
+
+      /* عرض رقم الهوية */
+      document.getElementById("issuedNumber").textContent =
+        "رقم الهوية: " + employeeData.identity_number;
+
+      /* تعبئة بيانات البطاقة */
+      document.getElementById("cardNameAr").textContent =
+        employeeData.full_name_ar;
+
+      document.getElementById("cardNameEn").textContent =
+        employeeData.full_name_en;
+
+      document.getElementById("cardJob").textContent =
+        employeeData.job_title;
+
+      document.getElementById("cardDirectorate").textContent =
+        employeeData.directorate;
+
+      document.getElementById("cardWorkplace").textContent =
+        employeeData.workplace;
+
+      document.getElementById("cardIdentity").textContent =
+        employeeData.identity_number;
+
+      document.getElementById("cardExpiry").textContent =
+        employeeData.expiry_date;
+
+      /* إنشاء QR في النتيجة والبطاقة */
+      createQR(
+        document.getElementById("qrCode"),
+        currentVerifyUrl,
+        200
+      );
+
+      createQR(
+        document.getElementById("cardQR"),
+        currentVerifyUrl,
+        110
+      );
+
+      issueResult.classList.remove("hidden");
+
+      showMessage(
+        issueMessage,
+        "تم إصدار الهوية بنجاح وإنشاء رمز التحقق.",
+        "success"
+      );
+
+      issueResult.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      document.getElementById("identityForm").reset();
+
+    } catch (error) {
+      console.error("Issue identity error:", error);
+
+      showMessage(
+        issueMessage,
+        error.message || "حدث خطأ أثناء إصدار الهوية.",
+        "error"
+      );
+
+    } finally {
+      button.disabled = false;
+      button.textContent = "إصدار الهوية";
+    }
+  }
+);
+
+/* نسخ رابط التحقق */
+document.getElementById("copyLinkButton").addEventListener(
+  "click",
+  async function() {
+    if (!currentVerifyUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(currentVerifyUrl);
+
+      showMessage(
+        issueMessage,
+        "تم نسخ رابط التحقق.",
+        "success"
+      );
+
+    } catch (error) {
+      showMessage(
+        issueMessage,
+        "تعذر النسخ. افتح الصفحة باستخدام اتصال آمن HTTPS.",
+        "error"
+      );
+    }
+  }
+);
+
+/* طباعة الوجهين */
+document.getElementById("printButton").addEventListener(
+  "click",
+  function() {
+    if (!currentVerifyUrl || !currentEmployee) {
+      showMessage(
+        issueMessage,
+        "لا توجد هوية جاهزة للطباعة.",
+        "error"
+      );
+      return;
+    }
+
+    window.print();
+  }
+);
+
+/* تشغيل استعادة الجلسة */
+restoreSession();
+
+</script>
+
 </body>
 </html>

@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#087e91">
+
   <title>التحقق من الهوية الوظيفية</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -17,6 +22,7 @@
       font-family: Tahoma, Arial, sans-serif;
       color: #173b48;
     }
+
     .card {
       background: white;
       width: 100%;
@@ -26,6 +32,7 @@
       text-align: center;
       box-shadow: 0 8px 35px #173b4815;
     }
+
     .logo {
       width: 65px;
       height: 65px;
@@ -37,38 +44,75 @@
       place-items: center;
       font-size: 30px;
     }
-    h2 { margin: 20px 0 8px; }
-    #message { line-height: 1.9; color: #637980; }
+
+    h2 {
+      margin: 20px 0 8px;
+    }
+
+    #message {
+      line-height: 1.9;
+      color: #637980;
+    }
+
     .status {
       margin: 22px 0;
       padding: 18px;
       border-radius: 12px;
       font-weight: bold;
+      line-height: 1.8;
     }
-    .active { background: #e6f7ed; color: #167447; }
-    .invalid, .expired, .suspended, .error {
+
+    .active {
+      background: #e6f7ed;
+      color: #167447;
+    }
+
+    .invalid,
+    .expired,
+    .suspended,
+    .error {
       background: #fff0ef;
       color: #a52d29;
     }
-    .waiting { background: #edf4f7; color: #476773; }
+
+    .waiting {
+      background: #edf4f7;
+      color: #476773;
+    }
+
     .details {
       font-size: 14px;
       line-height: 2.2;
       color: #536b74;
+      white-space: pre-line;
     }
+
     a {
       display: inline-block;
       margin-top: 20px;
       color: #087e91;
       text-decoration: none;
     }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #87999e;
+    }
   </style>
 </head>
+
 <body>
+
   <main class="card">
+
     <div class="logo">✓</div>
+
     <h2>التحقق من الهوية الوظيفية</h2>
-    <p id="message">جارٍ التحقق من رمز الهوية...</p>
+
+    <p id="message">
+      جارٍ الاتصال بخدمة التحقق...
+    </p>
 
     <div id="status" class="status waiting">
       يرجى الانتظار
@@ -76,14 +120,22 @@
 
     <div id="details" class="details"></div>
 
-    <a href="./index.html">العودة إلى الصفحة الرئيسية</a>
+    <a href="./index.html">
+      العودة إلى الصفحة الرئيسية
+    </a>
+
+    <div class="footer">
+      نظام تجريبي للتحقق من الهوية الوظيفية
+    </div>
+
   </main>
 
   <script>
-    // سنضع رابط مشروع Supabase الجديد هنا في الخطوة التالية.
-   const VERIFY_ENDPOINT = "https://wdlaerlifmwyguyjzjew.supabase.co/functions/v1/verify-identity";
+    "use strict";
 
-    const token = new URLSearchParams(location.search).get("token");
+    // رابط خدمة التحقق في مشروع Supabase V2
+    const VERIFY_ENDPOINT =
+      "https://wdlaerlifmwyguyjzjew.supabase.co/functions/v1/verify-identity";
 
     const statusBox = document.getElementById("status");
     const messageBox = document.getElementById("message");
@@ -96,56 +148,153 @@
     }
 
     async function verifyIdentity() {
+
+      // استخراج رمز التحقق من رابط الصفحة
+      const token = new URLSearchParams(
+        window.location.search
+      ).get("token");
+
+      // التأكد من وجود الرمز وصحة شكله
       if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
-        messageBox.textContent = "تعذر التحقق من الهوية.";
-        showResult("invalid", "رمز التحقق مفقود أو غير صالح");
+
+        messageBox.textContent =
+          "تعذر التحقق من الهوية.";
+
+        showResult(
+          "invalid",
+          "رمز التحقق مفقود أو غير صالح"
+        );
+
         return;
       }
 
+      // إظهار حالة الانتظار
+      messageBox.textContent =
+        "جارٍ الاتصال بخدمة التحقق...";
+
+      showResult(
+        "waiting",
+        "جارٍ التحقق من رمز الهوية"
+      );
+
+      // مهلة قصوى للاتصال: 15 ثانية
+      const controller = new AbortController();
+
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 15000);
+
       try {
+
         const response = await fetch(VERIFY_ENDPOINT, {
+
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token })
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            token: token
+          }),
+
+          signal: controller.signal
+
         });
 
+        clearTimeout(timeoutId);
+
+        // قراءة استجابة الخادم
         const result = await response.json();
 
-        if (result.valid && result.status === "active") {
+        // فحص حالة HTTP
+        if (!response.ok) {
+
+          throw new Error(
+            result.message ||
+            "خطأ في خدمة التحقق. رمز الاستجابة: " +
+            response.status
+          );
+
+        }
+
+        // الهوية فعالة
+        if (
+          result.valid === true &&
+          result.status === "active"
+        ) {
+
           messageBox.textContent =
             "تم العثور على سجل الهوية والتحقق من صلاحيتها.";
+
           showResult(
             "active",
             "✓ الهوية صالحة وفعالة",
-            "تاريخ الإصدار: " + result.issue_date +
-            "\nتاريخ الانتهاء: " + result.expiry_date
+
+            "تاريخ الإصدار: " +
+            (result.issue_date || "غير متوفر") +
+
+            "\nتاريخ الانتهاء: " +
+            (result.expiry_date || "غير متوفر")
           );
-        } else {
-          messageBox.textContent = "نتيجة التحقق من الهوية:";
-          const states = {
-            invalid: "invalid",
-            expired: "expired",
-            suspended: "suspended"
-          };
-          showResult(
-            states[result.status] || "error",
-            result.message || "تعذر إثبات صلاحية الهوية"
-          );
+
+          return;
         }
+
+        // الهوية غير فعالة أو غير موجودة
+        const states = {
+          invalid: "invalid",
+          expired: "expired",
+          suspended: "suspended"
+        };
+
+        const status = states[result.status] || "error";
+
+        messageBox.textContent =
+          "اكتملت عملية التحقق من الرمز.";
+
+        showResult(
+          status,
+          result.message ||
+          "تعذر إثبات صلاحية الهوية"
+        );
+
       } catch (error) {
-  console.error("Verification error:", error);
 
-  messageBox.textContent =
-    "تفاصيل الخطأ: " + (error.message || String(error));
+        clearTimeout(timeoutId);
 
-  showResult(
-    "error",
-    "تعذر إكمال التحقق",
-    error.message || String(error)
-  );
-}
+        console.error(
+          "Verification error:",
+          error
+        );
 
+        messageBox.textContent =
+          "تعذر إكمال الاتصال بخدمة التحقق.";
+
+        if (error.name === "AbortError") {
+
+          showResult(
+            "error",
+            "انتهت مهلة الاتصال",
+            "لم تستجب خدمة التحقق خلال 15 ثانية. يرجى المحاولة لاحقاً."
+          );
+
+        } else {
+
+          showResult(
+            "error",
+            "حدث خطأ أثناء التحقق",
+            error.message || "تعذر الاتصال بالخادم."
+          );
+
+        }
+      }
+    }
+
+    // تشغيل عملية التحقق
     verifyIdentity();
+
   </script>
+
 </body>
 </html>

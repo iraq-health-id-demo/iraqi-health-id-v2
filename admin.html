@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة إدارة الهوية الوظيفية</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Tahoma, Arial, sans-serif;
+      background: linear-gradient(135deg, #e6f1f4, #d5e5eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .panel {
+      width: 100%;
+      max-width: 440px;
+      background: white;
+      padding: 35px 28px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px #23445520;
+    }
+    .logo {
+      width: 68px;
+      height: 68px;
+      margin: auto auto 18px;
+      border-radius: 50%;
+      background: #d9edf2;
+      color: #287b91;
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+    }
+    h1 { text-align: center; font-size: 23px; color: #183e50; }
+    .subtitle { text-align: center; color: #71828b; line-height: 1.8; }
+    label { display: block; margin: 18px 0 7px; color: #294c5c; }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd9df;
+      border-radius: 10px;
+      font-size: 16px;
+      direction: ltr;
+      text-align: left;
+    }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #287f91;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    #message {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 9px;
+      line-height: 1.7;
+      display: none;
+      overflow-wrap: anywhere;
+    }
+    .error { display: block !important; background: #fff0f0; color: #9a3030; }
+    .success { display: block !important; background: #eaf7ef; color: #23633c; }
+    .notice {
+      margin-top: 22px;
+      padding: 12px;
+      border-radius: 9px;
+      background: #f1f6f8;
+      color: #637781;
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <div class="logo">✚</div>
+    <h1>لوحة إدارة الهوية الوظيفية</h1>
+    <p class="subtitle">نظام إدارة الهويات الوظيفية الصحية – النسخة التجريبية</p>
+
+    <form id="loginForm">
+      <label for="email">البريد الإلكتروني للمشرف</label>
+      <input id="email" type="email" autocomplete="username"
+             placeholder="admin@example.com" required>
+
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password"
+             autocomplete="current-password" required>
+
+      <button id="loginButton" type="submit">تسجيل الدخول</button>
+    </form>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <div class="notice">
+      نظام تجريبي غير معتمد رسمياً من وزارة الصحة.
+      لا تشارك بيانات الدخول مع أي شخص.
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = "https://wdlaerlifmwyguyjzjew.supabase.co";
+    const SUPABASE_ANON_KEY = "ضع_مفتاح_Publishable_أو_anon_هنا";
+
+    const message = document.getElementById("message");
+    const button = document.getElementById("loginButton");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = type;
+    }
+
+    const clientReady =
+      SUPABASE_ANON_KEY !== "ضع_مفتاح_Publishable_أو_anon_هنا";
+
+    let supabaseClient = null;
+
+    if (clientReady) {
+      supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!supabaseClient) {
+        showMessage("لم تتم إضافة مفتاح الاتصال العام بعد.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "جارٍ تسجيل الدخول...";
+
+      try {
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value
+          });
+
+        if (error) throw error;
+
+        if (!data.user) {
+          throw new Error("تعذر الحصول على بيانات المستخدم.");
+        }
+
+        showMessage(
+          "تم تسجيل الدخول بنجاح. يجري استكمال فحص صلاحية المشرف في الخطوة التالية.",
+          "success"
+        );
+
+      } catch (error) {
+        showMessage(error.message || "تعذر تسجيل الدخول.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = "تسجيل الدخول";
+      }
+    });
+  </script>
+</body>
+</html>

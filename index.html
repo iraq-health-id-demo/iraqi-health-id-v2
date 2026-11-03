@@ -56,6 +56,16 @@
       line-height: 1.8;
       overflow-x: hidden;
     }
+    <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js", { scope: "./" })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
+}
+</script>
 
     a {
       text-decoration: none;

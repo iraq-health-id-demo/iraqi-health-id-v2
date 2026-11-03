@@ -1,8 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#087f72">
 <meta name="mobile-web-app-capable" content="yes">
@@ -10,570 +8,611 @@
 <meta name="apple-mobile-web-app-title" content="Health ID">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#073b50">
-  <title>لوحة إدارة الهوية الوظيفية الصحية</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة إدارة الهوية الوظيفية الصحية</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --navy: #073b50;
-      --navy2: #0b5368;
-      --teal: #12a6a0;
-      --teal-light: #e6f7f5;
-      --bg: #f3f7f9;
-      --white: #fff;
-      --text: #18313c;
-      --muted: #71838c;
-      --border: #dce7eb;
-      --danger: #c0392b;
-      --success: #16845d;
-      --shadow: 0 12px 35px rgba(7,59,80,.08);
-      --radius: 16px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Cairo", sans-serif;
-    }
-    <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js", { scope: "./" })
-      .catch((error) => {
-        console.error("Service Worker registration failed:", error);
-      });
-  });
+<style>
+:root {
+  --navy: #073b50;
+  --navy2: #0b5368;
+  --teal: #12a6a0;
+  --teal-light: #e6f7f5;
+  --bg: #f3f7f9;
+  --white: #fff;
+  --text: #18313c;
+  --muted: #71838c;
+  --border: #dce7eb;
+  --danger: #c0392b;
+  --success: #16845d;
+  --shadow: 0 12px 35px rgba(7,59,80,.08);
+  --radius: 16px;
 }
-</script>
-
-    button, input, select {
-      font: inherit;
-    }
-
-    button { cursor: pointer; }
-
-    .hidden { display: none !important; }
-
-    .topbar {
-      background: linear-gradient(120deg,var(--navy),var(--navy2));
-      color: white;
-      padding: 17px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-icon {
-      width: 45px;
-      height: 45px;
-      border-radius: 13px;
-      display: grid;
-      place-items: center;
-      background: rgba(255,255,255,.14);
-      font-size: 23px;
-    }
-
-    .brand h1 {
-      font-size: 17px;
-      margin: 0;
-      font-weight: 800;
-    }
-
-    .brand p {
-      margin: 2px 0 0;
-      font-size: 11px;
-      color: #c5e3e9;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-    }
-
-    .container {
-      max-width: 1250px;
-      padding: 28px 18px 60px;
-      margin: auto;
-    }
-
-    .panel {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      margin-bottom: 22px;
-    }
-
-    .section-title {
-      margin: 0 0 5px;
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--navy);
-    }
-
-    .section-subtitle {
-      color: var(--muted);
-      font-size: 12px;
-      margin: 0 0 22px;
-    }
-
-    .login-wrap {
-      max-width: 440px;
-      margin: 65px auto;
-    }
-
-    .login-logo {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .login-logo .symbol {
-      width: 72px;
-      height: 72px;
-      margin: auto auto 12px;
-      border-radius: 22px;
-      display: grid;
-      place-items: center;
-      background: var(--navy);
-      color: white;
-      font-size: 32px;
-    }
-
-    .field-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 16px;
-    }
-
-    .field { min-width: 0; }
-
-    .field.full { grid-column: 1 / -1; }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 7px;
-      color: #29434e;
-    }
-
-    input, select {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: #fbfdfe;
-      color: var(--text);
-      padding: 12px 13px;
-      outline: none;
-      transition: .2s;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px rgba(18,166,160,.11);
-    }
-
-    input[type="file"] {
-      padding: 9px;
-      font-size: 12px;
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 5px;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 10px;
-      padding: 11px 18px;
-      font-weight: 700;
-      transition: .2s;
-    }
-
-    .btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      background: var(--teal);
-      color: white;
-    }
-
-    .btn-primary:hover { background: #0b8d88; }
-
-    .btn-dark {
-      background: var(--navy);
-      color: white;
-    }
-
-    .btn-light {
-      background: #edf4f6;
-      color: var(--navy);
-    }
-
-    .btn-danger {
-      background: #fff0ef;
-      color: var(--danger);
-    }
-
-    .btn-block { width: 100%; }
-
-    .form-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 22px;
-    }
-
-    .notice {
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin: 15px 0;
-      font-size: 12px;
-      line-height: 1.8;
-    }
-
-    .notice.info {
-      background: #eaf5f9;
-      color: #24576b;
-    }
-
-    .notice.warning {
-      background: #fff7e6;
-      color: #805a15;
-    }
-
-    .notice.error {
-      background: #fff0ef;
-      color: #a93226;
-    }
-
-    .notice.success {
-      background: #e9f8f0;
-      color: #176c4b;
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .toolbar .meta {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .status-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #22b879;
-      border-radius: 50%;
-      margin-left: 5px;
-    }
-
-    .preview-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 22px;
-      align-items: start;
-      margin-top: 25px;
-    }
-
-    .preview-side h3 {
-      color: var(--navy);
-      font-size: 14px;
-      margin: 0 0 10px;
-    }
-
-    .identity-card {
-      width: 100%;
-      max-width: 430px;
-      aspect-ratio: 85.6 / 54;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-      color: #173a48;
-      background: #e8f7f8;
-      border: 1px solid #a9d5dc;
-      box-shadow: 0 8px 24px rgba(0,0,0,.12);
-      direction: rtl;
-      margin: auto;
-    }
-
-    .card-head {
-      height: 22%;
-      padding: 3% 4%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: white;
-      background: linear-gradient(110deg,#07516a,#0d8b91);
-    }
-
-    .card-head strong {
-      font-size: clamp(8px,1.8vw,13px);
-      line-height: 1.5;
-    }
-
-    .card-head small {
-      display: block;
-      font-size: clamp(5px,1vw,8px);
-      opacity: .85;
-    }
-
-    .card-mark {
-      width: 12%;
-      height: 80%;
-      border-radius: 9px;
-      background: rgba(255,255,255,.17);
-      display: grid;
-      place-items: center;
-      font-size: clamp(12px,3vw,22px);
-    }
-
-    .card-body {
-      height: 78%;
-      padding: 3% 4%;
-      display: flex;
-      gap: 4%;
-      position: relative;
-      background:
-        radial-gradient(circle at 80% 100%,rgba(14,160,164,.12),transparent 45%),
-        linear-gradient(140deg,#f4ffff,#d9f0f2);
-    }
-
-    .photo-box {
-      width: 25%;
-      height: 72%;
-      flex-shrink: 0;
-      background: #c8dfe3;
-      border: 2px solid white;
-      border-radius: 7px;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      color: #50727b;
-      font-size: 9px;
-      text-align: center;
-    }
-
-    .photo-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .card-info {
-      flex: 1;
-      min-width: 0;
-      font-size: clamp(6px,1.3vw,10px);
-      line-height: 1.65;
-      overflow: hidden;
-    }
-
-    .card-info .person-name {
-      font-weight: 800;
-      font-size: clamp(8px,1.8vw,13px);
-      color: #07516a;
-      margin-bottom: 3%;
-      overflow-wrap: anywhere;
-    }
-
-    .card-info .en-name {
-      direction: ltr;
-      text-align: right;
-      font-weight: 700;
-      color: #39717b;
-    }
-
-    .card-info .data-line {
-      border-bottom: 1px solid rgba(7,81,106,.13);
-      padding: 1% 0;
-      overflow-wrap: anywhere;
-    }
-
-    .card-info b { color: #07516a; }
-
-    .card-bottom {
-      position: absolute;
-      bottom: 3%;
-      right: 4%;
-      left: 4%;
-      border-top: 1px solid rgba(7,81,106,.2);
-      padding-top: 2%;
-      font-size: clamp(5px,1vw,8px);
-      display: flex;
-      justify-content: space-between;
-      gap: 5px;
-    }
-
-    .back-card {
-      background: linear-gradient(145deg,#f4ffff,#d9f0f2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 5%;
-    }
-
-    .back-band {
-      position: absolute;
-      top: 0;
-      height: 17%;
-      left: 0;
-      right: 0;
-      background: linear-gradient(110deg,#07516a,#0d8b91);
-    }
-
-    .qr-area {
-      position: relative;
-      margin-top: 4%;
-      background: white;
-      padding: 5px;
-      border-radius: 7px;
-      width: 34%;
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-    }
-
-    .qr-area img, .qr-area canvas {
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    .back-text {
-      position: relative;
-      font-size: clamp(6px,1.3vw,10px);
-      line-height: 1.8;
-      margin-top: 3%;
-      max-width: 90%;
-    }
-
-    .back-number {
-      font-weight: 800;
-      color: #07516a;
-    }
-
-    .print-note {
-      color: var(--muted);
-      font-size: 11px;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 11px;
-      padding: 25px 10px;
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      border: 2px solid rgba(255,255,255,.4);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      vertical-align: middle;
-      margin-left: 7px;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    [dir="ltr"] .field label { text-align: left; }
-    [dir="ltr"] .card-info { direction: ltr; }
-    [dir="ltr"] .card-info .person-name { text-align: left; }
-
-    @media(max-width:700px) {
-      .field-grid, .preview-grid { grid-template-columns: 1fr; }
-      .panel { padding: 17px; }
-      .container { padding: 18px 12px 40px; }
-      .login-wrap { margin: 30px auto; }
-    }
-
-    @media print {
-      @page {
-        size: 85.6mm 54mm;
-        margin: 0;
-      }
-
-      body {
-        background: white !important;
-        margin: 0 !important;
-      }
-
-      body * { visibility: hidden !important; }
-
-      #printArea, #printArea * {
-        visibility: visible !important;
-      }
-
-      #printArea {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 85.6mm;
-        margin: 0;
-        padding: 0;
-      }
-
-      .print-card {
-        width: 85.6mm !important;
-        height: 54mm !important;
-        max-width: none !important;
-        aspect-ratio: auto !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        margin: 0 !important;
-        page-break-after: always;
-        break-after: page;
-        print-color-adjust: exact;
-        -webkit-print-color-adjust: exact;
-      }
-
-      .print-card:last-child {
-        page-break-after: auto;
-        break-after: auto;
-      }
-
-      .print-card * { visibility: visible !important; }
-    }
-  </style>
-</head>
-
-<body>
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Cairo", sans-serif;
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.hidden { display: none !important; }
+
+.topbar {
+  background: linear-gradient(120deg,var(--navy),var(--navy2));
+  color: white;
+  padding: 17px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.14);
+  font-size: 23px;
+}
+
+.brand h1 {
+  font-size: 17px;
+  margin: 0;
+  font-weight: 800;
+}
+
+.brand p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #c5e3e9;
+}
+
+.top-actions {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+
+.container {
+  max-width: 1250px;
+  padding: 28px 18px 60px;
+  margin: auto;
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+}
+
+.section-title {
+  margin: 0 0 5px;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.section-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0 0 22px;
+}
+
+.login-wrap {
+  max-width: 440px;
+  margin: 65px auto;
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-logo .symbol {
+  width: 72px;
+  height: 72px;
+  margin: auto auto 12px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+  color: white;
+  font-size: 32px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 16px;
+}
+
+.field { min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 7px;
+  color: #29434e;
+}
+
+input, select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfdfe;
+  color: var(--text);
+  padding: 12px 13px;
+  outline: none;
+  transition: .2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(18,166,160,.11);
+}
+
+input[type="file"] {
+  padding: 9px;
+  font-size: 12px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: white;
+}
+
+.btn-primary:hover { background: #0b8d88; }
+
+.btn-dark {
+  background: var(--navy);
+  color: white;
+}
+
+.btn-light {
+  background: #edf4f6;
+  color: var(--navy);
+}
+
+.btn-danger {
+  background: #fff0ef;
+  color: var(--danger);
+}
+
+.btn-block { width: 100%; }
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.notice {
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 15px 0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.notice.info {
+  background: #eaf5f9;
+  color: #24576b;
+}
+
+.notice.warning {
+  background: #fff7e6;
+  color: #805a15;
+}
+
+.notice.error {
+  background: #fff0ef;
+  color: #a93226;
+}
+
+.notice.success {
+  background: #e9f8f0;
+  color: #176c4b;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.toolbar .meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #22b879;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 22px;
+  align-items: start;
+  margin-top: 25px;
+}
+
+.preview-side h3 {
+  color: var(--navy);
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.identity-card {
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 85.6 / 54;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  color: #173a48;
+  background: #e8f7f8;
+  border: 1px solid #a9d5dc;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  direction: rtl;
+  margin: auto;
+}
+
+.card-head {
+  height: 22%;
+  padding: 3% 4%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  background: linear-gradient(110deg,#07516a,#0d8b91);
+}
+
+.card-head strong {
+  font-size: clamp(8px,1.8vw,13px);
+  line-height: 1.5;
+}
+
+.card-head small {
+  display: block;
+  font-size: clamp(5px,1vw,8px);
+  opacity: .85;
+}
+
+.card-mark {
+  width: 12%;
+  height: 80%;
+  border-radius: 9px;
+  background: rgba(255,255,255,.17);
+  display: grid;
+  place-items: center;
+  font-size: clamp(12px,3vw,22px);
+}
+
+.card-body {
+  height: 78%;
+  padding: 3% 4%;
+  display: flex;
+  gap: 4%;
+  position: relative;
+  background:
+    radial-gradient(circle at 80% 100%,rgba(14,160,164,.12),transparent 45%),
+    linear-gradient(140deg,#f4ffff,#d9f0f2);
+}
+
+.photo-box {
+  width: 25%;
+  height: 72%;
+  flex-shrink: 0;
+  background: #c8dfe3;
+  border: 2px solid white;
+  border-radius: 7px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: #50727b;
+  font-size: 9px;
+  text-align: center;
+}
+
+.photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(6px,1.3vw,10px);
+  line-height: 1.65;
+  overflow: hidden;
+}
+
+.card-info .person-name {
+  font-weight: 800;
+  font-size: clamp(8px,1.8vw,13px);
+  color: #07516a;
+  margin-bottom: 3%;
+  overflow-wrap: anywhere;
+}
+
+.card-info .en-name {
+  direction: ltr;
+  text-align: right;
+  font-weight: 700;
+  color: #39717b;
+}
+
+.card-info .data-line {
+  border-bottom: 1px solid rgba(7,81,106,.13);
+  padding: 1% 0;
+  overflow-wrap: anywhere;
+}
+
+.card-info b { color: #07516a; }
+
+.card-bottom {
+  position: absolute;
+  bottom: 3%;
+  right: 4%;
+  left: 4%;
+  border-top: 1px solid rgba(7,81,106,.2);
+  padding-top: 2%;
+  font-size: clamp(5px,1vw,8px);
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.back-card {
+  background: linear-gradient(145deg,#f4ffff,#d9f0f2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5%;
+}
+
+.back-band {
+  position: absolute;
+  top: 0;
+  height: 17%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(110deg,#07516a,#0d8b91);
+}
+
+.qr-area {
+  position: relative;
+  margin-top: 4%;
+  background: white;
+  padding: 5px;
+  border-radius: 7px;
+  width: 34%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.qr-area img, .qr-area canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.back-text {
+  position: relative;
+  font-size: clamp(6px,1.3vw,10px);
+  line-height: 1.8;
+  margin-top: 3%;
+  max-width: 90%;
+}
+
+.back-number {
+  font-weight: 800;
+  color: #07516a;
+}
+
+.print-note {
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 25px 10px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  vertical-align: middle;
+  margin-left: 7px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+[dir="ltr"] .field label { text-align: left; }
+[dir="ltr"] .card-info { direction: ltr; }
+[dir="ltr"] .card-info .person-name { text-align: left; }
+
+@media(max-width:700px) {
+  .field-grid, .preview-grid { grid-template-columns: 1fr; }
+  .panel { padding: 17px; }
+  .container { padding: 18px 12px 40px; }
+  .login-wrap { margin: 30px auto; }
+}
+
+@media print {
+  @page {
+    size: 85.6mm 54mm;
+    margin: 0;
+  }
+
+  body {
+    background: white !important;
+    margin: 0 !important;
+  }
+
+  body * { visibility: hidden !important; }
+
+  #printArea, #printArea * {
+    visibility: visible !important;
+  }
+
+  #printArea {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 85.6mm;
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-card {
+    width: 85.6mm !important;
+    height: 54mm !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    page-break-after: always;
+    break-after: page;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .print-card:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .print-card * { visibility: visible !important; }
+}
+
+.records-panel { margin-top: 22px; }
+.records-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.records-tools input { flex: 1; min-width: 190px; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+  font-size: 12px;
+}
+.records-table th, .records-table td {
+  padding: 12px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.records-table th {
+  background: #f3f8fa;
+  color: var(--navy);
+  font-weight: 800;
+}
+.records-table tr:last-child td { border-bottom: 0; }
+.status-pill {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: #e9f8f0;
+  color: #176c4b;
+  font-weight: 700;
+}
+.status-pill.inactive,
+.status-pill.revoked,
+.status-pill.expired {
+  background: #fff0ef;
+  color: #a93226;
+}
+.empty-state {
+  padding: 22px;
+  text-align: center;
+  color: var(--muted);
+}
+.records-count {
+  color: var(--muted);
+  font-size: 12px;
+}
+.small-btn {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+</style>
+  <body>
 
 <header class="topbar">
   <div class="brand">
@@ -624,13 +663,17 @@ if ("serviceWorker" in navigator) {
   <!-- ADMIN -->
   <section id="adminSection" class="hidden">
 
+    <!-- ISSUE FORM -->
     <div class="panel">
       <div class="toolbar">
         <div>
           <h2 class="section-title" id="welcomeTitle">إصدار هوية وظيفية جديدة</h2>
           <p class="section-subtitle" id="welcomeSubtitle">أدخل بيانات الموظف بدقة قبل إصدار الهوية</p>
         </div>
-        <div class="meta"><span class="status-dot"></span><span id="adminStatus">جلسة مشرف نشطة</span></div>
+        <div class="meta">
+          <span class="status-dot"></span>
+          <span id="adminStatus">جلسة مشرف نشطة</span>
+        </div>
       </div>
 
       <div class="notice warning" id="experimentalNotice">
@@ -688,7 +731,9 @@ if ("serviceWorker" in navigator) {
           <div class="field">
             <label for="employeePhoto" id="labelPhoto">الصورة الشخصية</label>
             <input id="employeePhoto" type="file" accept="image/jpeg,image/png,image/webp">
-            <div class="hint" id="photoHint">الصورة للمعاينة والطباعة في هذا المتصفح فقط، ولا تُرفع إلى قاعدة البيانات.</div>
+            <div class="hint" id="photoHint">
+              الصورة للمعاينة والطباعة في هذا المتصفح فقط، ولا تُرفع إلى قاعدة البيانات.
+            </div>
           </div>
 
         </div>
@@ -701,6 +746,52 @@ if ("serviceWorker" in navigator) {
         </div>
       </form>
     </div>
+
+    <!-- ISSUED IDENTITIES -->
+    <section id="recordsSection" class="panel records-panel">
+      <div class="toolbar">
+        <div>
+          <h2 class="section-title" id="recordsTitle">الهويات الصادرة</h2>
+          <p class="section-subtitle" id="recordsSubtitle">سجل الهويات المسجلة في النظام</p>
+        </div>
+        <span class="records-count" id="recordsCount">—</span>
+      </div>
+
+      <div class="records-tools">
+        <input
+          id="recordsSearch"
+          type="search"
+          placeholder="ابحث بالاسم أو رقم الهوية أو الرقم الوظيفي"
+          aria-label="البحث في الهويات"
+        >
+        <button class="btn btn-dark" id="refreshRecordsBtn" type="button">
+          تحديث القائمة
+        </button>
+      </div>
+
+      <div id="recordsMessage" aria-live="polite"></div>
+
+      <div class="table-wrap">
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>الاسم</th>
+              <th>رقم الهوية</th>
+              <th>الرقم الوظيفي</th>
+              <th>جهة العمل</th>
+              <th>تاريخ الإصدار</th>
+              <th>تاريخ الانتهاء</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="recordsTableBody">
+            <tr>
+              <td colspan="7" class="empty-state">جارٍ تحميل السجلات...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
     <!-- RESULT -->
     <section id="resultSection" class="panel hidden">
@@ -717,8 +808,11 @@ if ("serviceWorker" in navigator) {
       </div>
 
       <div class="preview-grid" id="printArea">
+
+        <!-- FRONT -->
         <div class="preview-side">
           <h3 id="frontTitle">الوجه الأمامي</h3>
+
           <div class="identity-card print-card" id="frontCard">
             <div class="card-head">
               <div>
@@ -727,16 +821,35 @@ if ("serviceWorker" in navigator) {
               </div>
               <div class="card-mark">✚</div>
             </div>
+
             <div class="card-body">
               <div class="photo-box" id="cardPhotoBox">PHOTO</div>
+
               <div class="card-info">
                 <div class="person-name" id="cardNameAr">اسم الموظف</div>
                 <div class="en-name" id="cardNameEn">Employee Name</div>
-                <div class="data-line"><b id="cardJobLabel">العنوان الوظيفي:</b> <span id="cardJob">—</span></div>
-                <div class="data-line"><b>ID:</b> <span id="cardIdentity">—</span></div>
-                <div class="data-line"><b id="cardDirectorateLabel">الدائرة:</b> <span id="cardDirectorate">—</span></div>
-                <div class="data-line"><b id="cardWorkplaceLabel">مكان العمل:</b> <span id="cardWorkplace">—</span></div>
+
+                <div class="data-line">
+                  <b id="cardJobLabel">العنوان الوظيفي:</b>
+                  <span id="cardJob">—</span>
+                </div>
+
+                <div class="data-line">
+                  <b>ID:</b>
+                  <span id="cardIdentity">—</span>
+                </div>
+
+                <div class="data-line">
+                  <b id="cardDirectorateLabel">الدائرة:</b>
+                  <span id="cardDirectorate">—</span>
+                </div>
+
+                <div class="data-line">
+                  <b id="cardWorkplaceLabel">مكان العمل:</b>
+                  <span id="cardWorkplace">—</span>
+                </div>
               </div>
+
               <div class="card-bottom">
                 <span id="cardIssue">إصدار: —</span>
                 <span id="cardExpiry">انتهاء: —</span>
@@ -745,15 +858,23 @@ if ("serviceWorker" in navigator) {
           </div>
         </div>
 
+        <!-- BACK -->
         <div class="preview-side">
           <h3 id="backTitle">الوجه الخلفي</h3>
+
           <div class="identity-card back-card print-card" id="backCard">
             <div class="back-band"></div>
             <div class="qr-area" id="qrArea"></div>
+
             <div class="back-text">
               <strong id="backVerifyTitle">التحقق من صحة الهوية</strong>
               <div id="backVerifySubtitle">امسح رمز QR للتحقق من حالة الهوية</div>
-              <div class="back-number"><span id="backIdLabel">رقم الهوية:</span> <span id="backIdentity">—</span></div>
+
+              <div class="back-number">
+                <span id="backIdLabel">رقم الهوية:</span>
+                <span id="backIdentity">—</span>
+              </div>
+
               <div id="backExperimental">نظام تحقق تجريبي مستقل</div>
             </div>
           </div>
@@ -780,8 +901,7 @@ if ("serviceWorker" in navigator) {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<script>
+    <script>
 "use strict";
 
 /* =========================================================
@@ -790,7 +910,9 @@ if ("serviceWorker" in navigator) {
 ========================================================= */
 
 const SUPABASE_URL = "https://wdlaerlifmwyguyjzjew.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jmBRnMzDnF-LRWEj9jVoPA_ZtZQExou";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_jmBRnMzDnF-LRWEj9jVoPA_ZtZQExou";
 
 const VERIFY_PAGE_URL =
   "https://iraq-health-id-demo.github.io/iraqi-health-id-v2/verify.html";
@@ -869,7 +991,15 @@ const translations = {
     qrFailed: "تعذر إنشاء رمز QR.",
     loading: "جارٍ التنفيذ...",
     connectionError: "تعذر الاتصال بالخدمة. تحقق من الإنترنت وحاول مجدداً.",
-    employeeNoHint: "اختياري. يجب أن يكون الرقم الوظيفي فريداً إذا أُدخل."
+    employeeNoHint: "اختياري. يجب أن يكون الرقم الوظيفي فريداً إذا أُدخل.",
+    recordsTitle: "الهويات الصادرة",
+    recordsSubtitle: "سجل الهويات المسجلة في النظام",
+    searchPlaceholder: "ابحث بالاسم أو رقم الهوية أو الرقم الوظيفي",
+    refresh: "تحديث القائمة",
+    loadingRecords: "جارٍ تحميل السجلات...",
+    noRecords: "لا توجد هويات مسجلة حالياً.",
+    recordsLoadFailed: "تعذر تحميل الهويات. تحقق من إعداد وظيفة list-identities وصلاحيات المشرف.",
+    recordsCount: "عدد السجلات"
   },
 
   en: {
@@ -927,7 +1057,15 @@ const translations = {
     qrFailed: "Could not generate QR code.",
     loading: "Processing...",
     connectionError: "Service connection failed. Check your internet connection.",
-    employeeNoHint: "Optional. If provided, the employee number must be unique."
+    employeeNoHint: "Optional. If provided, the employee number must be unique.",
+    recordsTitle: "Issued Identities",
+    recordsSubtitle: "Identities registered in the system",
+    searchPlaceholder: "Search by name, identity number, or employee number",
+    refresh: "Refresh list",
+    loadingRecords: "Loading records...",
+    noRecords: "No identities are currently registered.",
+    recordsLoadFailed: "Could not load identities. Check the list-identities function and administrator permissions.",
+    recordsCount: "Records"
   }
 };
 
@@ -1014,18 +1152,19 @@ function applyLanguage() {
     footerText: "footer"
   };
 
-  Object.entries(map).forEach(([id,key]) => {
+  Object.entries(map).forEach(([id, key]) => {
     $(id).textContent = t(key);
   });
 
   $("languageBtn").textContent = isArabic ? "English" : "العربية";
-
   $("employee_number").placeholder = t("employeeNoHint");
+  $("recordsSearch").placeholder = t("searchPlaceholder");
 }
 
 $("languageBtn").addEventListener("click", () => {
   language = language === "ar" ? "en" : "ar";
   applyLanguage();
+  renderIssuedIdentities();
 });
 
 /* =========================================================
@@ -1062,6 +1201,7 @@ function showAdmin() {
   $("loginSection").classList.add("hidden");
   $("adminSection").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden");
+  loadIssuedIdentities();
 }
 
 function showLogin() {
@@ -1100,7 +1240,6 @@ $("loginForm").addEventListener("submit", async event => {
 
   } catch (error) {
     console.error("LOGIN ERROR", error);
-
     await supabaseClient.auth.signOut();
 
     const message = error.message === "ADMIN_NOT_AUTHORIZED"
@@ -1129,7 +1268,180 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 });
 
 /* =========================================================
-   5. SESSION INITIALIZATION
+   5. ISSUED IDENTITIES LIST
+   Requires protected Supabase Edge Function: list-identities
+   Expected response: { success: true, identities: [...] }
+========================================================= */
+
+let issuedIdentities = [];
+
+function safeText(value) {
+  return value === null || value === undefined || value === ""
+    ? "—"
+    : String(value);
+}
+
+function normalizeIdentity(row) {
+  const employee = row.employee || row.employees || {};
+
+  return {
+    name: row.full_name_ar || employee.full_name_ar || row.name || "—",
+    identityNumber: row.identity_number || employee.identity_number || "—",
+    employeeNumber: row.employee_number || employee.employee_number || "—",
+    workplace: row.workplace || employee.workplace || "—",
+    issueDate: row.issue_date || "—",
+    expiryDate: row.expiry_date || "—",
+    status: row.status || row.identity_status ||
+      (row.is_active === false ? "inactive" : "active")
+  };
+}
+
+function statusLabel(status) {
+  const value = String(status || "active").toLowerCase();
+
+  if (["revoked", "cancelled", "canceled"].includes(value)) {
+    return language === "ar" ? "ملغاة" : "Revoked";
+  }
+
+  if (["inactive", "suspended", "disabled"].includes(value)) {
+    return language === "ar" ? "موقوفة" : "Inactive";
+  }
+
+  if (value === "expired") {
+    return language === "ar" ? "منتهية" : "Expired";
+  }
+
+  return language === "ar" ? "فعالة" : "Active";
+}
+
+function renderIssuedIdentities() {
+  const query = $("recordsSearch").value.trim().toLocaleLowerCase();
+
+  const filtered = issuedIdentities
+    .map(normalizeIdentity)
+    .filter(item =>
+      [
+        item.name,
+        item.identityNumber,
+        item.employeeNumber,
+        item.workplace
+      ].join(" ").toLocaleLowerCase().includes(query)
+    );
+
+  const body = $("recordsTableBody");
+  body.replaceChildren();
+
+  $("recordsCount").textContent =
+    `${t("recordsCount")}: ${filtered.length}`;
+
+  if (!filtered.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+
+    td.colSpan = 7;
+    td.className = "empty-state";
+
+    td.textContent = issuedIdentities.length
+      ? (language === "ar" ? "لا توجد نتائج مطابقة." : "No matching results.")
+      : t("noRecords");
+
+    tr.appendChild(td);
+    body.appendChild(tr);
+    return;
+  }
+
+  filtered.forEach(item => {
+    const tr = document.createElement("tr");
+
+    [
+      item.name,
+      item.identityNumber,
+      item.employeeNumber,
+      item.workplace,
+      item.issueDate,
+      item.expiryDate
+    ].forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = safeText(value);
+      tr.appendChild(td);
+    });
+
+    const statusTd = document.createElement("td");
+    const pill = document.createElement("span");
+    const status = String(item.status).toLowerCase();
+
+    pill.className = "status-pill" +
+      (["inactive", "revoked", "expired", "suspended", "disabled"]
+        .includes(status) ? ` ${status}` : "");
+
+    pill.textContent = statusLabel(item.status);
+    statusTd.appendChild(pill);
+    tr.appendChild(statusTd);
+
+    body.appendChild(tr);
+  });
+}
+
+async function loadIssuedIdentities() {
+  const button = $("refreshRecordsBtn");
+
+  button.disabled = true;
+
+  $("recordsTableBody").innerHTML =
+    `<tr><td colspan="7" class="empty-state">${t("loadingRecords")}</td></tr>`;
+
+  clearMessage($("recordsMessage"));
+
+  try {
+    await checkAdminAuthorization();
+
+    const { data, error } =
+      await supabaseClient.functions.invoke(
+        "list-identities",
+        { body: {} }
+      );
+
+    if (error) throw error;
+
+    if (
+      !data ||
+      data.success !== true ||
+      !Array.isArray(data.identities)
+    ) {
+      throw new Error("INVALID_LIST_RESPONSE");
+    }
+
+    issuedIdentities = data.identities;
+    renderIssuedIdentities();
+
+  } catch (error) {
+    console.error("LOAD IDENTITIES ERROR", error);
+
+    $("recordsTableBody").innerHTML =
+      `<tr><td colspan="7" class="empty-state">${t("recordsLoadFailed")}</td></tr>`;
+
+    setMessage(
+      $("recordsMessage"),
+      t("recordsLoadFailed"),
+      "error"
+    );
+
+  } finally {
+    button.disabled = false;
+  }
+}
+
+$("refreshRecordsBtn").addEventListener(
+  "click",
+  loadIssuedIdentities
+);
+
+$("recordsSearch").addEventListener(
+  "input",
+  renderIssuedIdentities
+);
+      /* =========================================================
+   6. SESSION INITIALIZATION
 ========================================================= */
 
 async function initializeApp() {
@@ -1151,7 +1463,7 @@ async function initializeApp() {
 }
 
 /* =========================================================
-   6. FORM VALIDATION
+   7. FORM VALIDATION
 ========================================================= */
 
 function getFormData() {
@@ -1192,7 +1504,7 @@ function validateForm(data) {
 }
 
 /* =========================================================
-   7. LOCAL PHOTO PREVIEW
+   8. LOCAL PHOTO PREVIEW
 ========================================================= */
 
 $("employeePhoto").addEventListener("change", event => {
@@ -1252,7 +1564,7 @@ function renderPhoto() {
 }
 
 /* =========================================================
-   8. SAFE CARD PREVIEW
+   9. SAFE CARD PREVIEW
 ========================================================= */
 
 function updateCard(data) {
@@ -1262,15 +1574,20 @@ function updateCard(data) {
   $("cardIdentity").textContent = data.identity_number;
   $("cardDirectorate").textContent = data.directorate;
   $("cardWorkplace").textContent = data.workplace;
-  $("cardIssue").textContent = t("issuePrefix") + " " + data.issue_date;
-  $("cardExpiry").textContent = t("expiryPrefix") + " " + data.expiry_date;
+
+  $("cardIssue").textContent =
+    t("issuePrefix") + " " + data.issue_date;
+
+  $("cardExpiry").textContent =
+    t("expiryPrefix") + " " + data.expiry_date;
+
   $("backIdentity").textContent = data.identity_number;
 
   renderPhoto();
 }
 
 /* =========================================================
-   9. QR CODE
+   10. QR CODE
 ========================================================= */
 
 function createQRCode(url) {
@@ -1292,7 +1609,7 @@ function createQRCode(url) {
 }
 
 /* =========================================================
-   10. EDGE FUNCTION ERROR HANDLING
+   11. EDGE FUNCTION ERROR HANDLING
 ========================================================= */
 
 async function extractFunctionError(error) {
@@ -1303,6 +1620,7 @@ async function extractFunctionError(error) {
       if (typeof error.context.json === "function") {
         const body = await error.context.json();
         details = JSON.stringify(body);
+
       } else if (typeof error.context.text === "function") {
         details = await error.context.text();
       }
@@ -1319,10 +1637,12 @@ async function extractFunctionError(error) {
   if (details) {
     try {
       const parsed = JSON.parse(details);
+
       return parsed.database_message ||
         parsed.message ||
         parsed.error ||
         details;
+
     } catch (_) {
       return details;
     }
@@ -1332,7 +1652,7 @@ async function extractFunctionError(error) {
 }
 
 /* =========================================================
-   11. ISSUE IDENTITY
+   12. ISSUE IDENTITY
 ========================================================= */
 
 $("identityForm").addEventListener("submit", async event => {
@@ -1341,6 +1661,7 @@ $("identityForm").addEventListener("submit", async event => {
   if (isSubmitting) return;
 
   const button = $("issueBtn");
+
   clearMessage($("formMessage"));
 
   const data = getFormData();
@@ -1350,11 +1671,13 @@ $("identityForm").addEventListener("submit", async event => {
       setMessage($("formMessage"), t("required"));
       return;
     }
+
   } catch (error) {
     if (error.message === "INVALID_DATES") {
       setMessage($("formMessage"), t("invalidDates"));
       return;
     }
+
     throw error;
   }
 
@@ -1362,7 +1685,8 @@ $("identityForm").addEventListener("submit", async event => {
   setBusy(button, true, t("issue"));
 
   try {
-    const { data: sessionData } = await supabaseClient.auth.getSession();
+    const { data: sessionData } =
+      await supabaseClient.auth.getSession();
 
     if (!sessionData.session) {
       throw new Error("SESSION_EXPIRED");
@@ -1399,7 +1723,9 @@ $("identityForm").addEventListener("submit", async event => {
       returnedUrl.origin !== expectedUrl.origin ||
       returnedUrl.pathname !== expectedUrl.pathname
     ) {
-      throw new Error("The returned verification URL is not valid.");
+      throw new Error(
+        "The returned verification URL is not valid."
+      );
     }
 
     currentVerificationUrl = response.verify_url;
@@ -1408,6 +1734,7 @@ $("identityForm").addEventListener("submit", async event => {
     createQRCode(currentVerificationUrl);
 
     $("resultSection").classList.remove("hidden");
+
     $("resultSection").scrollIntoView({
       behavior: "smooth",
       block: "start"
@@ -1415,9 +1742,14 @@ $("identityForm").addEventListener("submit", async event => {
 
     setMessage(
       $("formMessage"),
-      language === "ar" ? "تم إصدار الهوية بنجاح." : "Identity issued successfully.",
+      language === "ar"
+        ? "تم إصدار الهوية بنجاح."
+        : "Identity issued successfully.",
       "success"
     );
+
+    // تحديث سجل الهويات بعد الإصدار
+    await loadIssuedIdentities();
 
   } catch (error) {
     console.error("ISSUE IDENTITY ERROR", error);
@@ -1426,8 +1758,10 @@ $("identityForm").addEventListener("submit", async event => {
 
     if (message === "SESSION_EXPIRED") {
       message = t("sessionExpired");
+
       await supabaseClient.auth.signOut();
       showLogin();
+
     } else if (
       message.includes("Failed to fetch") ||
       message.includes("FunctionsFetchError")
@@ -1444,15 +1778,18 @@ $("identityForm").addEventListener("submit", async event => {
 });
 
 /* =========================================================
-   12. CLEAR AND RESET
+   13. CLEAR AND RESET
 ========================================================= */
 
 function resetForm() {
   $("identityForm").reset();
+
   currentPhotoData = null;
   currentVerificationUrl = null;
+
   $("resultSection").classList.add("hidden");
   $("qrArea").replaceChildren();
+
   renderPhoto();
   clearMessage($("formMessage"));
 }
@@ -1467,7 +1804,7 @@ $("newIdentityBtn").addEventListener("click", () => {
 });
 
 /* =========================================================
-   13. COPY VERIFICATION URL
+   14. COPY VERIFICATION URL
 ========================================================= */
 
 $("copyLinkBtn").addEventListener("click", async () => {
@@ -1475,15 +1812,26 @@ $("copyLinkBtn").addEventListener("click", async () => {
 
   try {
     await navigator.clipboard.writeText(currentVerificationUrl);
-    setMessage($("resultInfo"), t("copied"), "success");
+
+    setMessage(
+      $("resultInfo"),
+      t("copied"),
+      "success"
+    );
+
   } catch (error) {
     console.error("COPY ERROR", error);
-    setMessage($("resultInfo"), t("copyFailed"), "error");
+
+    setMessage(
+      $("resultInfo"),
+      t("copyFailed"),
+      "error"
+    );
   }
 });
 
 /* =========================================================
-   14. PRINT BOTH SIDES
+   15. PRINT BOTH SIDES
 ========================================================= */
 
 $("printBtn").addEventListener("click", () => {
@@ -1496,25 +1844,44 @@ $("printBtn").addEventListener("click", () => {
 });
 
 /* =========================================================
-   15. DEFAULT DATES
+   16. DEFAULT DATES
 ========================================================= */
 
 function setDefaultDates() {
   const today = new Date();
+
   const localToday = new Date(
     today.getTime() - today.getTimezoneOffset() * 60000
-  ).toISOString().slice(0,10);
+  ).toISOString().slice(0, 10);
 
   $("issue_date").value = localToday;
 }
 
 /* =========================================================
-   16. START
+   17. START
 ========================================================= */
 
 setDefaultDates();
 initializeApp();
 
 </script>
+
+<!-- SERVICE WORKER REGISTRATION -->
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js", {
+      scope: "./"
+    }).catch(error => {
+      console.error(
+        "Service Worker registration failed:",
+        error
+      );
+    });
+  });
+}
+</script>
+
 </body>
 </html>
+</head>

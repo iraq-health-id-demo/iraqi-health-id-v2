@@ -1,300 +1,1209 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#087e91">
+  <meta name="theme-color" content="#073b50">
 
-  <title>التحقق من الهوية الوظيفية</title>
+  <title>التحقق من الهوية الوظيفية الصحية</title>
+
+  <meta name="description" content="صفحة التحقق التجريبية من حالة الهوية الوظيفية الصحية باستخدام رمز تحقق مخصص.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --navy: #073b50;
+      --navy-dark: #052b3b;
+      --navy-light: #0c586e;
+      --teal: #12a6a0;
+      --bg: #f3f7f9;
+      --white: #ffffff;
+      --text: #183744;
+      --muted: #758790;
+      --border: #e0e9ed;
+
+      --green: #16845d;
+      --green-bg: #e8f7ef;
+
+      --red: #c0392b;
+      --red-bg: #fff0ee;
+
+      --orange: #a76b13;
+      --orange-bg: #fff5df;
+
+      --blue: #246d91;
+      --blue-bg: #eaf5fa;
+
+      --shadow: 0 18px 50px rgba(7,59,80,.09);
+      --radius: 20px;
+    }
+
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background: #f1f7f8;
-      font-family: Tahoma, Arial, sans-serif;
-      color: #173b48;
+      background:
+        radial-gradient(circle at 10% 10%,rgba(18,166,160,.07),transparent 28%),
+        var(--bg);
+      font-family: "Cairo",sans-serif;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
     }
 
-    .card {
-      background: white;
-      width: 100%;
-      max-width: 440px;
-      padding: 32px 24px;
-      border-radius: 18px;
-      text-align: center;
-      box-shadow: 0 8px 35px #173b4815;
-    }
-
-    .logo {
-      width: 65px;
-      height: 65px;
-      margin: auto;
-      border-radius: 50%;
-      background: #e1f3f4;
-      color: #087e91;
-      display: grid;
-      place-items: center;
-      font-size: 30px;
-    }
-
-    h2 {
-      margin: 20px 0 8px;
-    }
-
-    #message {
-      line-height: 1.9;
-      color: #637980;
-    }
-
-    .status {
-      margin: 22px 0;
-      padding: 18px;
-      border-radius: 12px;
-      font-weight: bold;
-      line-height: 1.8;
-    }
-
-    .active {
-      background: #e6f7ed;
-      color: #167447;
-    }
-
-    .invalid,
-    .expired,
-    .suspended,
-    .error {
-      background: #fff0ef;
-      color: #a52d29;
-    }
-
-    .waiting {
-      background: #edf4f7;
-      color: #476773;
-    }
-
-    .details {
-      font-size: 14px;
-      line-height: 2.2;
-      color: #536b74;
-      white-space: pre-line;
+    button {
+      font: inherit;
+      cursor: pointer;
     }
 
     a {
-      display: inline-block;
-      margin-top: 20px;
-      color: #087e91;
       text-decoration: none;
     }
 
-    .footer {
-      margin-top: 24px;
+    .topbar {
+      background: linear-gradient(110deg,var(--navy-dark),var(--navy-light));
+      color: white;
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 5px 22px rgba(7,59,80,.12);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.14);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .brand p {
+      font-size: 10px;
+      color: #c4e2e9;
+    }
+
+    .language-btn {
+      border: 1px solid rgba(255,255,255,.35);
+      color: white;
+      background: rgba(255,255,255,.08);
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      padding: 45px 15px 55px;
+    }
+
+    .container {
+      width: min(660px,100%);
+      margin: auto;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .intro-symbol {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 21px;
+      background: linear-gradient(135deg,var(--navy),var(--teal));
+      color: white;
+      font-size: 31px;
+      box-shadow: 0 10px 25px rgba(18,166,160,.18);
+    }
+
+    .intro h2 {
+      color: var(--navy);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .intro p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .verify-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .status-area {
+      text-align: center;
+      padding: 10px 0 22px;
+    }
+
+    .status-icon {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 39px;
+      font-weight: 800;
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .status-icon.valid {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .status-icon.invalid {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .status-icon.suspended {
+      background: var(--orange-bg);
+      color: var(--orange);
+    }
+
+    .status-icon.expired {
+      background: var(--orange-bg);
+      color: var(--orange);
+    }
+
+    .status-icon.loading {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .loader {
+      width: 35px;
+      height: 35px;
+      border: 4px solid rgba(36,109,145,.15);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .status-title {
+      font-size: 22px;
+      color: var(--navy);
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .status-description {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 2;
+      max-width: 440px;
+      margin: auto;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 17px;
+      border-radius: 30px;
       font-size: 11px;
-      color: #87999e;
+      font-weight: 800;
+      margin-top: 14px;
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .status-badge.valid {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .status-badge.invalid {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .status-badge.suspended,
+    .status-badge.expired {
+      background: var(--orange-bg);
+      color: var(--orange);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0 23px;
+    }
+
+    .details-title {
+      font-size: 14px;
+      color: var(--navy);
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .detail-item {
+      background: #f7fafb;
+      border: 1px solid #edf2f4;
+      padding: 13px;
+      border-radius: 12px;
+      min-width: 0;
+    }
+
+    .detail-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-label {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--navy);
+      overflow-wrap: anywhere;
+    }
+
+    .notice {
+      margin-top: 20px;
+      padding: 13px 15px;
+      border-radius: 11px;
+      font-size: 11px;
+      line-height: 2;
+    }
+
+    .notice.info {
+      color: #285c70;
+      background: var(--blue-bg);
+    }
+
+    .notice.warning {
+      color: #805a15;
+      background: var(--orange-bg);
+    }
+
+    .notice.error {
+      color: #a93226;
+      background: var(--red-bg);
+    }
+
+    .notice.success {
+      color: #176c4b;
+      background: var(--green-bg);
+    }
+
+    .action-area {
+      margin-top: 23px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 19px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: .2s;
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--teal);
+    }
+
+    .btn-primary:hover {
+      background: #0b8e89;
+      transform: translateY(-2px);
+    }
+
+    .btn-light {
+      background: #edf4f6;
+      color: var(--navy);
+    }
+
+    .btn-light:hover {
+      background: #dcebef;
+    }
+
+    .security-note {
+      margin-top: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.9;
+    }
+
+    .footer {
+      padding: 20px 15px;
+      background: var(--navy-dark);
+      color: #b8d0d9;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    .footer strong {
+      display: block;
+      color: white;
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+
+    [dir="ltr"] .detail-item {
+      text-align: left;
+    }
+
+    [dir="ltr"] .detail-value {
+      direction: ltr;
+      text-align: left;
+    }
+
+    @media(max-width:550px) {
+      main {
+        padding: 30px 12px 40px;
+      }
+
+      .verify-card {
+        padding: 21px 16px;
+      }
+
+      .intro h2 {
+        font-size: 20px;
+      }
+
+      .status-title {
+        font-size: 19px;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-item.full {
+        grid-column: auto;
+      }
+
+      .brand h1 {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <main class="card">
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">✚</div>
+    <div>
+      <h1 id="headerTitle">نظام التحقق من الهوية الوظيفية الصحية</h1>
+      <p id="headerSubtitle">صفحة التحقق الإلكتروني – إصدار تجريبي</p>
+    </div>
+  </div>
 
-    <div class="logo">✓</div>
+  <button class="language-btn" id="languageBtn" type="button">
+    English
+  </button>
+</header>
 
-    <h2>التحقق من الهوية الوظيفية</h2>
+<main>
+  <div class="container">
 
-    <p id="message">
-      جارٍ الاتصال بخدمة التحقق...
-    </p>
-
-    <div id="status" class="status waiting">
-      يرجى الانتظار
+    <div class="intro">
+      <div class="intro-symbol">✚</div>
+      <h2 id="pageTitle">التحقق من الهوية الوظيفية</h2>
+      <p id="pageSubtitle">
+        خدمة تحقق إلكترونية تجريبية باستخدام رمز QR
+      </p>
     </div>
 
-    <div id="details" class="details"></div>
+    <section class="verify-card" aria-live="polite">
 
-    <a href="./index.html">
-      العودة إلى الصفحة الرئيسية
-    </a>
+      <div class="status-area">
+        <div class="status-icon loading" id="statusIcon">
+          <div class="loader"></div>
+        </div>
 
-    <div class="footer">
-      نظام تجريبي للتحقق من الهوية الوظيفية
-    </div>
+        <h2 class="status-title" id="statusTitle">
+          جارٍ التحقق من الهوية
+        </h2>
 
-  </main>
+        <p class="status-description" id="statusDescription">
+          يرجى الانتظار حتى اكتمال عملية التحقق من الخادم.
+        </p>
 
-  <script>
-    "use strict";
+        <span class="status-badge" id="statusBadge">
+          جاري الفحص
+        </span>
+      </div>
 
-    // رابط خدمة التحقق في مشروع Supabase V2
-    const VERIFY_ENDPOINT =
-      "https://wdlaerlifmwyguyjzjew.supabase.co/functions/v1/verify-identity";
+      <div class="divider"></div>
 
-    const statusBox = document.getElementById("status");
-    const messageBox = document.getElementById("message");
-    const detailsBox = document.getElementById("details");
+      <h3 class="details-title" id="detailsTitle">
+        تفاصيل نتيجة التحقق
+      </h3>
 
-    function showResult(status, message, details = "") {
-      statusBox.className = "status " + status;
-      statusBox.textContent = message;
-      detailsBox.textContent = details;
+      <div class="details">
+
+        <div class="detail-item">
+          <span class="detail-label" id="labelStatus">حالة الهوية</span>
+          <strong class="detail-value" id="valueStatus">قيد التحقق</strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label" id="labelDate">تاريخ التحقق</span>
+          <strong class="detail-value" id="valueDate">—</strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label" id="labelIssue">تاريخ الإصدار</span>
+          <strong class="detail-value" id="valueIssue">—</strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label" id="labelExpiry">تاريخ الانتهاء</span>
+          <strong class="detail-value" id="valueExpiry">—</strong>
+        </div>
+
+      </div>
+
+      <div class="notice info" id="notice">
+        لا تعرض هذه الصفحة البيانات الشخصية للموظف. تعرض نتيجة التحقق وحالة الهوية فقط.
+      </div>
+
+      <div class="action-area">
+        <button class="btn btn-primary" id="retryBtn" type="button">
+          إعادة التحقق
+        </button>
+
+        <a class="btn btn-light" href="./index.html" id="homeBtn">
+          العودة إلى الصفحة الرئيسية
+        </a>
+      </div>
+
+      <p class="security-note" id="securityNote">
+        لا تشارك رمز التحقق الخاص بالهوية مع الآخرين. نتيجة هذه الصفحة تجريبية ولا تحل محل التحقق الرسمي لدى الجهة المختصة.
+      </p>
+
+    </section>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <strong id="footerTitle">نظام الهوية الوظيفية الصحية</strong>
+  <span id="footerText">
+    منصة تجريبية مستقلة – لا تمثل نظاماً حكومياً معتمداً
+  </span>
+</footer>
+
+<script>
+"use strict";
+
+/* =====================================================
+   1. CONFIGURATION
+===================================================== */
+
+const SUPABASE_URL =
+  "https://wdlaerlifmwyguyjzjew.supabase.co";
+
+const VERIFY_FUNCTION_URL =
+  SUPABASE_URL + "/functions/v1/verify-identity";
+
+/*
+  لا تضع Service Role Key هنا.
+  وظيفة verify-identity عامة ومهيأة للتحقق من رمز QR.
+*/
+
+const REQUEST_TIMEOUT_MS = 15000;
+
+/* =====================================================
+   2. TRANSLATIONS
+===================================================== */
+
+const translations = {
+  ar: {
+    header: "نظام التحقق من الهوية الوظيفية الصحية",
+    headerSub: "صفحة التحقق الإلكتروني – إصدار تجريبي",
+    title: "التحقق من الهوية الوظيفية",
+    subtitle: "خدمة تحقق إلكترونية تجريبية باستخدام رمز QR",
+
+    loadingTitle: "جارٍ التحقق من الهوية",
+    loadingDesc: "يرجى الانتظار حتى اكتمال عملية التحقق من الخادم.",
+    loadingBadge: "جاري الفحص",
+
+    validTitle: "الهوية سارية",
+    validDesc: "تم التحقق من الرمز، وحالة الهوية مسجلة على أنها سارية.",
+    validBadge: "سارية",
+
+    invalidTitle: "تعذر إثبات صحة الهوية",
+    invalidDesc: "لم يتم العثور على هوية مطابقة لرمز التحقق المقدم.",
+    invalidBadge: "غير صالحة",
+
+    suspendedTitle: "الهوية موقوفة",
+    suspendedDesc: "تشير سجلات النظام إلى أن حالة هذه الهوية موقوفة.",
+    suspendedBadge: "موقوفة",
+
+    expiredTitle: "انتهت صلاحية الهوية",
+    expiredDesc: "تم التعرف على الهوية، لكن تاريخ صلاحيتها قد انتهى.",
+    expiredBadge: "منتهية",
+
+    errorTitle: "تعذر إكمال عملية التحقق",
+    errorDesc: "حدث خطأ أثناء الاتصال بخدمة التحقق. يرجى المحاولة لاحقاً.",
+    errorBadge: "خطأ في الاتصال",
+
+    missingTitle: "رابط تحقق غير مكتمل",
+    missingDesc: "لم يتم العثور على رمز تحقق في الرابط. يرجى مسح رمز QR الموجود على البطاقة.",
+    missingBadge: "لا يوجد رمز",
+
+    details: "تفاصيل نتيجة التحقق",
+    status: "حالة الهوية",
+    date: "تاريخ التحقق",
+    issue: "تاريخ الإصدار",
+    expiry: "تاريخ الانتهاء",
+
+    checking: "قيد التحقق",
+    noDate: "غير متوفر",
+
+    validValue: "سارية",
+    invalidValue: "غير صالحة",
+    suspendedValue: "موقوفة",
+    expiredValue: "منتهية",
+    errorValue: "غير متاح",
+
+    privacy: "لا تعرض هذه الصفحة البيانات الشخصية للموظف. تعرض نتيجة التحقق وحالة الهوية فقط.",
+    warning: "هذه النتيجة صادرة عن نظام تجريبي مستقل ولا تمثل إثباتاً رسمياً للصفة الوظيفية أو اعتماداً حكومياً.",
+    errorNotice: "تعذر الاتصال بالخادم. لا يمكن اعتبار فشل الاتصال دليلاً على أن الهوية غير صحيحة.",
+    retry: "إعادة التحقق",
+    home: "العودة إلى الصفحة الرئيسية",
+    security: "لا تشارك رمز التحقق الخاص بالهوية مع الآخرين. نتيجة هذه الصفحة تجريبية ولا تحل محل التحقق الرسمي لدى الجهة المختصة.",
+    footer: "نظام الهوية الوظيفية الصحية",
+    footerSub: "منصة تجريبية مستقلة – لا تمثل نظاماً حكومياً معتمداً",
+
+    invalidResponse: "استجابة غير مفهومة من خادم التحقق.",
+    timeout: "استغرق الاتصال وقتاً طويلاً. حاول مرة أخرى.",
+    network: "تعذر الاتصال بالخادم. تحقق من الإنترنت وحاول مجدداً.",
+    serverError: "خدمة التحقق غير متاحة حالياً.",
+    invalidToken: "رمز التحقق غير صحيح أو غير موجود."
+  },
+
+  en: {
+    header: "Health Employee Identity Verification",
+    headerSub: "Electronic Verification – Experimental",
+    title: "Employee Identity Verification",
+    subtitle: "Experimental electronic verification using a QR code",
+
+    loadingTitle: "Verifying Identity",
+    loadingDesc: "Please wait while the server checks the verification token.",
+    loadingBadge: "Checking",
+
+    validTitle: "Identity Is Active",
+    validDesc: "The token was verified and the identity is recorded as active.",
+    validBadge: "Active",
+
+    invalidTitle: "Identity Could Not Be Verified",
+    invalidDesc: "No identity matching the provided verification token was found.",
+    invalidBadge: "Invalid",
+
+    suspendedTitle: "Identity Is Suspended",
+    suspendedDesc: "The system records indicate that this identity is suspended.",
+    suspendedBadge: "Suspended",
+
+    expiredTitle: "Identity Has Expired",
+    expiredDesc: "The identity was recognized, but its validity period has ended.",
+    expiredBadge: "Expired",
+
+    errorTitle: "Verification Could Not Be Completed",
+    errorDesc: "An error occurred while contacting the verification service. Please try again later.",
+    errorBadge: "Connection Error",
+
+    missingTitle: "Incomplete Verification Link",
+    missingDesc: "No verification token was found in the link. Please scan the QR code on the card.",
+    missingBadge: "No Token",
+
+    details: "Verification Details",
+    status: "Identity Status",
+    date: "Verification Date",
+    issue: "Issue Date",
+    expiry: "Expiry Date",
+
+    checking: "Checking",
+    noDate: "Not available",
+
+    validValue: "Active",
+    invalidValue: "Invalid",
+    suspendedValue: "Suspended",
+    expiredValue: "Expired",
+    errorValue: "Unavailable",
+
+    privacy: "This page does not display personal employee information. It only displays the verification result and identity status.",
+    warning: "This result is issued by an independent experimental system. It is not official proof of employment or government approval.",
+    errorNotice: "The server could not be reached. A connection failure does not mean that the identity is invalid.",
+    retry: "Retry Verification",
+    home: "Return to Home",
+    security: "Do not share the identity verification token with others. This experimental result does not replace official verification by the competent authority.",
+    footer: "Health Employee Identity System",
+    footerSub: "Independent experimental platform – Not an approved government system",
+
+    invalidResponse: "The verification server returned an unrecognized response.",
+    timeout: "The request took too long. Please try again.",
+    network: "Could not connect to the server. Check your internet connection.",
+    serverError: "The verification service is currently unavailable.",
+    invalidToken: "The verification token is invalid or does not exist."
+  }
+};
+
+/* =====================================================
+   3. STATE
+===================================================== */
+
+let language = "ar";
+let verificationToken = null;
+let requestRunning = false;
+let requestController = null;
+
+const $ = id => document.getElementById(id);
+
+function t(key) {
+  return translations[language][key] || key;
+}
+
+/* =====================================================
+   4. LANGUAGE
+===================================================== */
+
+function setLanguage(lang) {
+  if (!translations[lang]) return;
+
+  language = lang;
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+  const fixedMap = {
+    headerTitle: "header",
+    headerSubtitle: "headerSub",
+    pageTitle: "title",
+    pageSubtitle: "subtitle",
+    detailsTitle: "details",
+    labelStatus: "status",
+    labelDate: "date",
+    labelIssue: "issue",
+    labelExpiry: "expiry",
+    retryBtn: "retry",
+    homeBtn: "home",
+    securityNote: "security",
+    footerTitle: "footer",
+    footerText: "footerSub"
+  };
+
+  Object.entries(fixedMap).forEach(([id,key]) => {
+    $(id).textContent = t(key);
+  });
+
+  $("languageBtn").textContent =
+    lang === "ar" ? "English" : "العربية";
+
+  document.title = t("title");
+
+  if (lastResult) {
+    renderResult(lastResult);
+  } else if (!verificationToken) {
+    renderMissingToken();
+  } else if (requestRunning) {
+    renderLoading();
+  }
+}
+
+$("languageBtn").addEventListener("click", () => {
+  setLanguage(language === "ar" ? "en" : "ar");
+});
+
+/* =====================================================
+   5. DATE FORMATTING
+===================================================== */
+
+function formatDate(value) {
+  if (!value || typeof value !== "string") {
+    return t("noDate");
+  }
+
+  const date = new Date(value + (
+    /^\d{4}-\d{2}-\d{2}$/.test(value) ? "T00:00:00" : ""
+  ));
+
+  if (Number.isNaN(date.getTime())) {
+    return t("noDate");
+  }
+
+  return new Intl.DateTimeFormat(
+    language === "ar" ? "ar-IQ" : "en-GB",
+    {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }
+  ).format(date);
+}
+
+/* =====================================================
+   6. UI HELPERS
+===================================================== */
+
+let lastResult = null;
+
+function setStatus(type, title, description, badge) {
+  const icon = $("statusIcon");
+
+  icon.className = "status-icon " + type;
+  icon.replaceChildren();
+
+  if (type === "loading") {
+    const loader = document.createElement("div");
+    loader.className = "loader";
+    icon.appendChild(loader);
+  } else {
+    const symbols = {
+      valid: "✓",
+      invalid: "×",
+      suspended: "!",
+      expired: "!",
+      error: "!",
+      missing: "?"
+    };
+
+    icon.textContent = symbols[type] || "!";
+  }
+
+  $("statusTitle").textContent = title;
+  $("statusDescription").textContent = description;
+  $("statusBadge").textContent = badge;
+  $("statusBadge").className = "status-badge " + type;
+}
+
+function setNotice(message, type = "info") {
+  const notice = $("notice");
+  notice.textContent = message;
+  notice.className = "notice " + type;
+}
+
+function renderLoading() {
+  setStatus(
+    "loading",
+    t("loadingTitle"),
+    t("loadingDesc"),
+    t("loadingBadge")
+  );
+
+  $("valueStatus").textContent = t("checking");
+  $("valueDate").textContent = formatDate(
+    new Date().toISOString().slice(0,10)
+  );
+  $("valueIssue").textContent = "—";
+  $("valueExpiry").textContent = "—";
+
+  setNotice(t("privacy"), "info");
+}
+
+function renderMissingToken() {
+  lastResult = null;
+
+  setStatus(
+    "invalid",
+    t("missingTitle"),
+    t("missingDesc"),
+    t("missingBadge")
+  );
+
+  $("valueStatus").textContent = t("invalidValue");
+  $("valueDate").textContent = formatDate(
+    new Date().toISOString().slice(0,10)
+  );
+  $("valueIssue").textContent = "—";
+  $("valueExpiry").textContent = "—";
+
+  setNotice(t("warning"), "warning");
+}
+
+function renderError(message) {
+  lastResult = null;
+
+  setStatus(
+    "error",
+    t("errorTitle"),
+    message || t("errorDesc"),
+    t("errorBadge")
+  );
+
+  $("valueStatus").textContent = t("errorValue");
+  $("valueDate").textContent = formatDate(
+    new Date().toISOString().slice(0,10)
+  );
+  $("valueIssue").textContent = "—";
+  $("valueExpiry").textContent = "—";
+
+  setNotice(t("errorNotice"), "error");
+}
+
+/* =====================================================
+   7. RESPONSE NORMALIZATION
+===================================================== */
+
+function normalizeResponse(data) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("INVALID_RESPONSE");
+  }
+
+  const status = String(data.status || "").toLowerCase();
+
+  const isExplicitlyValid =
+    data.valid === true ||
+    data.is_valid === true ||
+    data.verified === true;
+
+  const isExplicitlyInvalid =
+    data.valid === false ||
+    data.is_valid === false ||
+    data.verified === false;
+
+  let resultType;
+
+  if (
+    status === "suspended" ||
+    status === "suspend"
+  ) {
+    resultType = "suspended";
+  } else if (
+    status === "expired" ||
+    status === "expire"
+  ) {
+    resultType = "expired";
+  } else if (
+    status === "active" &&
+    !isExplicitlyInvalid
+  ) {
+    resultType = "valid";
+  } else if (isExplicitlyValid) {
+    resultType = "valid";
+  } else {
+    resultType = "invalid";
+  }
+
+  return {
+    type: resultType,
+    issueDate: data.issue_date || null,
+    expiryDate: data.expiry_date || null
+  };
+}
+
+/* =====================================================
+   8. RESULT RENDERING
+===================================================== */
+
+function renderResult(result) {
+  const statusMap = {
+    valid: {
+      title: "validTitle",
+      desc: "validDesc",
+      badge: "validBadge",
+      value: "validValue"
+    },
+    invalid: {
+      title: "invalidTitle",
+      desc: "invalidDesc",
+      badge: "invalidBadge",
+      value: "invalidValue"
+    },
+    suspended: {
+      title: "suspendedTitle",
+      desc: "suspendedDesc",
+      badge: "suspendedBadge",
+      value: "suspendedValue"
+    },
+    expired: {
+      title: "expiredTitle",
+      desc: "expiredDesc",
+      badge: "expiredBadge",
+      value: "expiredValue"
+    }
+  };
+
+  const config = statusMap[result.type] || statusMap.invalid;
+
+  setStatus(
+    result.type,
+    t(config.title),
+    t(config.desc),
+    t(config.badge)
+  );
+
+  $("valueStatus").textContent = t(config.value);
+
+  $("valueDate").textContent = formatDate(
+    new Date().toISOString().slice(0,10)
+  );
+
+  $("valueIssue").textContent = formatDate(result.issueDate);
+  $("valueExpiry").textContent = formatDate(result.expiryDate);
+
+  if (result.type === "valid") {
+    setNotice(t("privacy"), "success");
+  } else if (result.type === "invalid") {
+    setNotice(t("warning"), "warning");
+  } else {
+    setNotice(t("warning"), "warning");
+  }
+}
+
+/* =====================================================
+   9. TOKEN EXTRACTION
+===================================================== */
+
+function extractToken() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (!token) return null;
+
+  /*
+    Expected token: 64 hexadecimal characters.
+    This matches the 32-byte random token generated
+    by the issue-identity Edge Function.
+  */
+
+  if (!/^[a-fA-F0-9]{64}$/.test(token)) {
+    return "INVALID_TOKEN_FORMAT";
+  }
+
+  return token;
+}
+
+/* =====================================================
+   10. REMOVE TOKEN FROM ADDRESS BAR
+===================================================== */
+
+function cleanAddressBar() {
+  try {
+    const cleanUrl =
+      window.location.origin +
+      window.location.pathname;
+
+    window.history.replaceState({}, document.title, cleanUrl);
+  } catch (error) {
+    console.warn("Could not clean browser address:", error);
+  }
+}
+
+/* =====================================================
+   11. SERVER VERIFICATION
+===================================================== */
+
+async function verifyIdentity() {
+  if (requestRunning) return;
+
+  if (!verificationToken) {
+    renderMissingToken();
+    return;
+  }
+
+  if (verificationToken === "INVALID_TOKEN_FORMAT") {
+    setStatus(
+      "invalid",
+      t("invalidTitle"),
+      t("invalidToken"),
+      t("invalidBadge")
+    );
+
+    $("valueStatus").textContent = t("invalidValue");
+    $("valueDate").textContent = formatDate(
+      new Date().toISOString().slice(0,10)
+    );
+
+    $("valueIssue").textContent = "—";
+    $("valueExpiry").textContent = "—";
+
+    setNotice(t("warning"), "warning");
+    return;
+  }
+
+  requestRunning = true;
+  renderLoading();
+
+  requestController = new AbortController();
+
+  const timeout = setTimeout(() => {
+    requestController.abort();
+  }, REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(VERIFY_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        token: verificationToken
+      }),
+      cache: "no-store",
+      credentials: "omit",
+      referrerPolicy: "no-referrer",
+      signal: requestController.signal
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (_) {
+      throw new Error("INVALID_RESPONSE");
     }
 
-    async function verifyIdentity() {
+    if (!response.ok) {
+      if (response.status === 404 || response.status === 400) {
+        lastResult = {
+          type: "invalid",
+          issueDate: null,
+          expiryDate: null
+        };
 
-      // استخراج رمز التحقق من رابط الصفحة
-      const token = new URLSearchParams(
-        window.location.search
-      ).get("token");
-
-      // التأكد من وجود الرمز وصحة شكله
-      if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
-
-        messageBox.textContent =
-          "تعذر التحقق من الهوية.";
-
-        showResult(
-          "invalid",
-          "رمز التحقق مفقود أو غير صالح"
-        );
-
+        renderResult(lastResult);
         return;
       }
 
-      // إظهار حالة الانتظار
-      messageBox.textContent =
-        "جارٍ الاتصال بخدمة التحقق...";
-
-      showResult(
-        "waiting",
-        "جارٍ التحقق من رمز الهوية"
-      );
-
-      // مهلة قصوى للاتصال: 15 ثانية
-      const controller = new AbortController();
-
-      const timeoutId = setTimeout(() => {
-        controller.abort();
-      }, 15000);
-
-      try {
-
-        const response = await fetch(VERIFY_ENDPOINT, {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            token: token
-          }),
-
-          signal: controller.signal
-
-        });
-
-        clearTimeout(timeoutId);
-
-        // قراءة استجابة الخادم
-        const result = await response.json();
-
-        // فحص حالة HTTP
-        if (!response.ok) {
-
-          throw new Error(
-            result.message ||
-            "خطأ في خدمة التحقق. رمز الاستجابة: " +
-            response.status
-          );
-
-        }
-
-        // الهوية فعالة
-        if (
-          result.valid === true &&
-          result.status === "active"
-        ) {
-
-          messageBox.textContent =
-            "تم العثور على سجل الهوية والتحقق من صلاحيتها.";
-
-          showResult(
-            "active",
-            "✓ الهوية صالحة وفعالة",
-
-            "تاريخ الإصدار: " +
-            (result.issue_date || "غير متوفر") +
-
-            "\nتاريخ الانتهاء: " +
-            (result.expiry_date || "غير متوفر")
-          );
-
-          return;
-        }
-
-        // الهوية غير فعالة أو غير موجودة
-        const states = {
-          invalid: "invalid",
-          expired: "expired",
-          suspended: "suspended"
-        };
-
-        const status = states[result.status] || "error";
-
-        messageBox.textContent =
-          "اكتملت عملية التحقق من الرمز.";
-
-        showResult(
-          status,
-          result.message ||
-          "تعذر إثبات صلاحية الهوية"
-        );
-
-      } catch (error) {
-
-        clearTimeout(timeoutId);
-
-        console.error(
-          "Verification error:",
-          error
-        );
-
-        messageBox.textContent =
-          "تعذر إكمال الاتصال بخدمة التحقق.";
-
-        if (error.name === "AbortError") {
-
-          showResult(
-            "error",
-            "انتهت مهلة الاتصال",
-            "لم تستجب خدمة التحقق خلال 15 ثانية. يرجى المحاولة لاحقاً."
-          );
-
-        } else {
-
-          showResult(
-            "error",
-            "حدث خطأ أثناء التحقق",
-            error.message || "تعذر الاتصال بالخادم."
-          );
-
-        }
+      if (response.status === 429) {
+        throw new Error("SERVER_ERROR");
       }
+
+      if (response.status >= 500) {
+        throw new Error("SERVER_ERROR");
+      }
+
+      throw new Error("INVALID_RESPONSE");
     }
 
-    // تشغيل عملية التحقق
-    verifyIdentity();
+    const normalized = normalizeResponse(data);
 
-  </script>
+    lastResult = normalized;
+    renderResult(normalized);
+
+  } catch (error) {
+    console.error("IDENTITY VERIFICATION ERROR", {
+      name: error.name,
+      message: error.message
+    });
+
+    if (error.name === "AbortError") {
+      renderError(t("timeout"));
+    } else if (error.message === "INVALID_RESPONSE") {
+      renderError(t("invalidResponse"));
+    } else if (error.message === "SERVER_ERROR") {
+      renderError(t("serverError"));
+    } else {
+      renderError(t("network"));
+    }
+
+  } finally {
+    clearTimeout(timeout);
+    requestController = null;
+    requestRunning = false;
+  }
+}
+
+/* =====================================================
+   12. RETRY
+===================================================== */
+
+$("retryBtn").addEventListener("click", () => {
+  if (!verificationToken) {
+    renderMissingToken();
+    return;
+  }
+
+  verifyIdentity();
+});
+
+/* =====================================================
+   13. INITIALIZE
+===================================================== */
+
+function initialize() {
+  setLanguage("ar");
+
+  verificationToken = extractToken();
+
+  /*
+    Capture the token first, then remove it from the visible
+    address bar and browser history.
+    The token remains only in memory for this page session.
+  */
+
+  cleanAddressBar();
+
+  if (!verificationToken) {
+    renderMissingToken();
+    return;
+  }
+
+  verifyIdentity();
+}
+
+initialize();
+
+</script>
 
 </body>
 </html>

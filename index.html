@@ -3,113 +3,1429 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#087e91">
-  <title>نظام الهوية الوظيفية الصحية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#073b50">
+
+  <title>نظام الهوية الوظيفية الصحية | Health ID</title>
+
+  <meta name="description" content="منصة تجريبية لإدارة والتحقق من الهوية الوظيفية الصحية إلكترونياً.">
+  <meta name="robots" content="index,follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; }
-    body {
+    :root {
+      --navy: #073b50;
+      --navy-dark: #052b3b;
+      --navy-light: #0d536b;
+      --teal: #12a6a0;
+      --teal-light: #dff5f2;
+      --white: #ffffff;
+      --bg: #f4f8fa;
+      --text: #183744;
+      --muted: #71858e;
+      --border: #e0e9ed;
+      --shadow: 0 15px 45px rgba(7,59,80,.09);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f2f7f8;
-      color: #173b48;
+      padding: 0;
     }
-    header {
-      background: linear-gradient(120deg,#075b75,#0c9ca4);
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Cairo", sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1160px, 92%);
+      margin: auto;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-content {
+      min-height: 76px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 47px;
+      height: 47px;
+      border-radius: 14px;
+      background: linear-gradient(135deg,var(--navy),var(--teal));
+      display: grid;
+      place-items: center;
       color: white;
-      padding: 24px 7%;
+      font-size: 25px;
+      box-shadow: 0 7px 18px rgba(18,166,160,.2);
+      flex-shrink: 0;
     }
-    .brand { font-size: 20px; font-weight: bold; }
+
+    .brand-text strong {
+      display: block;
+      color: var(--navy);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .brand-text span {
+      color: var(--muted);
+      font-size: 10px;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 700;
+      color: #526b75;
+      transition: .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .language-btn {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      border-radius: 10px;
+      padding: 8px 13px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .menu-btn {
+      display: none;
+      border: 0;
+      background: var(--teal-light);
+      color: var(--navy);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 21px;
+    }
+
+    /* BUTTONS */
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border-radius: 11px;
+      padding: 12px 21px;
+      font-size: 13px;
+      font-weight: 800;
+      transition: .25s;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+      box-shadow: 0 7px 20px rgba(18,166,160,.18);
+    }
+
+    .btn-primary:hover {
+      background: #0c8e89;
+      transform: translateY(-2px);
+    }
+
+    .btn-dark {
+      background: var(--navy);
+      color: white;
+    }
+
+    .btn-dark:hover {
+      background: var(--navy-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border-color: rgba(255,255,255,.45);
+      color: white;
+      background: rgba(255,255,255,.06);
+    }
+
+    .btn-outline:hover {
+      background: white;
+      color: var(--navy);
+    }
+
+    /* HERO */
+
     .hero {
-      text-align: center;
-      padding: 75px 20px 55px;
-      background: linear-gradient(135deg,#e4f5f6,#f7fbfc);
+      position: relative;
+      overflow: hidden;
+      color: white;
+      background:
+        radial-gradient(circle at 85% 15%,rgba(18,166,160,.3),transparent 30%),
+        radial-gradient(circle at 10% 90%,rgba(30,132,158,.25),transparent 30%),
+        linear-gradient(125deg,#052b3b,#073b50 55%,#0b5368);
+      padding: 90px 0 100px;
     }
-    .hero h1 { font-size: 30px; margin-bottom: 15px; }
-    .hero p { color: #58717a; line-height: 2; }
-    .actions {
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      left: -180px;
+      top: -200px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      right: 40%;
+      bottom: -220px;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 55px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.08);
+      padding: 7px 13px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #c9f2ee;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      background: #45d8bd;
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px,4vw,48px);
+      font-weight: 800;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span {
+      color: #50d1c1;
+    }
+
+    .hero-description {
+      max-width: 570px;
+      color: #d0e2e8;
+      font-size: 14px;
+      line-height: 2.1;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-note {
+      margin-top: 25px;
+      color: #b9d2dc;
+      font-size: 11px;
+    }
+
+    /* ID MOCKUP */
+
+    .visual-area {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 28px;
+      align-items: center;
+      min-width: 0;
     }
-    a.button {
-      text-decoration: none;
-      padding: 13px 25px;
-      border-radius: 9px;
-      background: #087e91;
+
+    .card-stack {
+      width: min(100%,440px);
+      position: relative;
+      padding: 20px 15px 45px;
+    }
+
+    .mock-card {
+      aspect-ratio: 85.6 / 54;
+      border-radius: 17px;
+      overflow: hidden;
+      box-shadow: 0 25px 55px rgba(0,0,0,.25);
+      position: relative;
+    }
+
+    .mock-front {
+      background: linear-gradient(135deg,#e9fbfa,#d1eef0);
+      color: var(--navy);
+      transform: rotate(-4deg);
+      z-index: 1;
+    }
+
+    .mock-back {
+      position: absolute;
+      width: 78%;
+      right: 10%;
+      bottom: 0;
+      background: linear-gradient(135deg,#f5ffff,#d8f1f1);
+      border: 1px solid #a4d7d7;
+      transform: rotate(5deg);
+      z-index: 2;
+    }
+
+    .mock-head {
+      height: 23%;
+      background: linear-gradient(100deg,#07516a,#0d9994);
       color: white;
-      font-weight: bold;
+      padding: 3% 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    a.secondary {
-      background: white;
-      color: #087e91;
-      border: 1px solid #087e91;
+
+    .mock-head strong {
+      font-size: clamp(9px,1.5vw,14px);
     }
-    .features {
-      max-width: 950px;
-      margin: 35px auto;
-      padding: 0 18px;
+
+    .mock-head small {
+      display: block;
+      font-size: 7px;
+    }
+
+    .mock-symbol {
+      width: 35px;
+      height: 35px;
+      background: rgba(255,255,255,.15);
+      border-radius: 10px;
       display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 18px;
+      place-items: center;
+      font-size: 21px;
     }
-    .feature {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 5px 20px #163b4810;
+
+    .mock-body {
+      display: flex;
+      gap: 5%;
+      padding: 5%;
     }
-    .feature h3 { color: #087e91; }
-    footer {
+
+    .mock-photo {
+      width: 24%;
+      aspect-ratio: 3 / 4;
+      background: linear-gradient(145deg,#9bbfc4,#d1e5e6);
+      border: 3px solid white;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      color: #46737c;
+    }
+
+    .mock-lines {
+      flex: 1;
+      padding-top: 2px;
+    }
+
+    .mock-line {
+      height: 6px;
+      background: #9ac7ca;
+      border-radius: 5px;
+      margin-bottom: 9px;
+      width: 85%;
+    }
+
+    .mock-line.large {
+      height: 10px;
+      width: 70%;
+      background: #07516a;
+    }
+
+    .mock-line.short { width: 45%; }
+
+    .mock-back-content {
+      position: relative;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .mock-qr {
+      width: 38%;
+      aspect-ratio: 1;
+      background:
+        repeating-conic-gradient(#073b50 0% 25%,white 0% 50%) 50% / 12px 12px;
+      border: 6px solid white;
+      border-radius: 5px;
+    }
+
+    .mock-back-content strong {
+      color: var(--navy);
+      font-size: 10px;
+    }
+
+    .mock-back-content span {
+      font-size: 7px;
+      color: var(--muted);
+    }
+
+    /* GENERAL SECTIONS */
+
+    section.content-section {
+      padding: 80px 0;
+    }
+
+    .section-heading {
       text-align: center;
-      padding: 25px;
-      color: #71858c;
+      max-width: 680px;
+      margin: 0 auto 45px;
+    }
+
+    .section-heading .tag {
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .section-heading h2 {
+      color: var(--navy);
+      font-size: clamp(23px,3vw,32px);
+      margin: 8px 0 10px;
+      font-weight: 800;
+    }
+
+    .section-heading p {
+      color: var(--muted);
       font-size: 13px;
     }
+
+    /* FEATURES */
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 19px;
+    }
+
+    .feature-card {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius);
+      padding: 27px 23px;
+      transition: .25s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+      border-color: #b9e5df;
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: var(--teal-light);
+      color: var(--navy);
+      font-size: 24px;
+      margin-bottom: 17px;
+    }
+
+    .feature-card h3 {
+      font-size: 16px;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 2;
+    }
+
+    /* HOW IT WORKS */
+
+    .steps-section {
+      background: var(--bg);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 25px;
+    }
+
+    .step {
+      position: relative;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .step-number {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: var(--navy);
+      color: white;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 17px;
+      font-size: 21px;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(7,59,80,.15);
+    }
+
+    .step h3 {
+      color: var(--navy);
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* SERVICES */
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 22px;
+    }
+
+    .service-card {
+      padding: 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: white;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .service-icon {
+      flex-shrink: 0;
+      width: 55px;
+      height: 55px;
+      border-radius: 16px;
+      background: var(--teal-light);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+    }
+
+    .service-card h3 {
+      color: var(--navy);
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+
+    /* NOTICE */
+
+    .notice-wrap {
+      padding: 0 0 75px;
+    }
+
+    .notice-box {
+      border: 1px solid #f0dfb7;
+      background: #fff9eb;
+      border-radius: 15px;
+      padding: 20px 23px;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .notice-symbol {
+      font-size: 23px;
+      flex-shrink: 0;
+    }
+
+    .notice-box strong {
+      color: #805a15;
+      font-size: 14px;
+    }
+
+    .notice-box p {
+      color: #816b44;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    /* CTA */
+
+    .cta {
+      background: linear-gradient(120deg,#073b50,#0c6474);
+      color: white;
+      border-radius: 23px;
+      padding: 43px 35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      margin-bottom: 75px;
+    }
+
+    .cta h2 {
+      font-size: 24px;
+      margin-bottom: 7px;
+    }
+
+    .cta p {
+      font-size: 12px;
+      color: #d1e7eb;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #052b3b;
+      color: white;
+      padding: 45px 0 20px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 30px;
+    }
+
+    .footer-brand {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .footer-grid p,
+    .footer-grid a {
+      color: #b8d0d9;
+      font-size: 12px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer-grid h3 {
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.12);
+      padding-top: 17px;
+      text-align: center;
+      color: #9dbac4;
+      font-size: 11px;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:900px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 76px;
+        right: 0;
+        left: 0;
+        background: white;
+        padding: 20px 5%;
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 13px;
+      }
+
+      .nav-links.open { display: flex; }
+
+      .menu-btn { display: block; }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 35px;
+      }
+
+      .hero-description { margin-inline: auto; }
+
+      .hero-buttons { justify-content: center; }
+
+      .card-stack { max-width: 390px; }
+
+      .features-grid { grid-template-columns: repeat(2,1fr); }
+    }
+
+    @media(max-width:600px) {
+      .brand-text strong { font-size: 12px; }
+      .brand-text span { font-size: 9px; }
+
+      .hero {
+        padding: 65px 0 75px;
+      }
+
+      .hero h1 { font-size: 29px; }
+
+      .hero-description { font-size: 12px; }
+
+      section.content-section { padding: 60px 0; }
+
+      .features-grid,
+      .steps-grid,
+      .services-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card { padding: 22px; }
+
+      .service-card { padding: 22px; }
+
+      .cta {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        padding: 30px 20px;
+      }
+
+      .nav-content { min-height: 68px; }
+
+      .nav-links { top: 68px; }
+
+      .nav-actions { gap: 6px; }
+
+      .language-btn { padding: 7px 10px; }
+    }
+
+    [dir="ltr"] .nav-links { direction: ltr; }
+    [dir="ltr"] .footer-grid { direction: ltr; }
+    [dir="ltr"] .notice-box { direction: ltr; }
   </style>
 </head>
+
 <body>
 
-<header>
-  <div class="brand">نظام الهوية الوظيفية الصحية</div>
+<!-- NAVIGATION -->
+
+<header class="navbar">
+  <div class="container nav-content">
+
+    <a class="brand" href="#home" aria-label="Health ID Home">
+      <div class="brand-icon">✚</div>
+      <div class="brand-text">
+        <strong data-i18n="brand">نظام الهوية الوظيفية الصحية</strong>
+        <span data-i18n="brandSub">منصة تجريبية للتحقق الإلكتروني</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" data-i18n="home">الرئيسية</a>
+      <a href="#about" data-i18n="about">عن النظام</a>
+      <a href="#features" data-i18n="features">المميزات</a>
+      <a href="#how" data-i18n="how">آلية العمل</a>
+      <a href="#services" data-i18n="services">الخدمات</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="language-btn" id="languageBtn" type="button">English</button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="القائمة" aria-expanded="false">☰</button>
+    </div>
+
+  </div>
 </header>
 
 <main>
-  <section class="hero">
-    <h1>الهوية الوظيفية الصحية الرقمية</h1>
-    <p>
-      منصة تجريبية لإدارة الهويات الوظيفية الصحية
-      وإصدارها والتحقق من صلاحيتها إلكترونياً.
-    </p>
-    <div class="actions">
-      <a class="button" href="verify.html">التحقق من الهوية</a>
-      <a class="button secondary" href="admin.html">دخول الإدارة</a>
-    </div>
-  </section>
 
-  <section class="features">
-    <article class="feature">
-      <h3>إصدار الهوية</h3>
-      <p>إنشاء هوية وظيفية بوجه أمامي وخلفي.</p>
-    </article>
-    <article class="feature">
-      <h3>التحقق الإلكتروني</h3>
-      <p>التحقق من حالة الهوية باستخدام رمز QR.</p>
-    </article>
-    <article class="feature">
-      <h3>إدارة الهويات</h3>
-      <p>تجديد الهويات وإيقافها ومتابعة صلاحيتها.</p>
-    </article>
-  </section>
+<!-- HERO -->
+
+<section class="hero" id="home">
+  <div class="container hero-grid">
+
+    <div class="hero-content">
+
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        <span data-i18n="heroTag">منصة رقمية تجريبية مستقلة</span>
+      </div>
+
+      <h1 data-i18n-html="heroTitle">
+        الهوية الوظيفية الصحية
+        <br>
+        <span>بمفهوم رقمي أكثر تطوراً</span>
+      </h1>
+
+      <p class="hero-description" data-i18n="heroDesc">
+        واجهة تجريبية لإدارة بيانات الهوية الوظيفية وإتاحة التحقق من حالتها عبر رمز QR، من خلال تجربة رقمية تجمع بين سهولة الاستخدام وتنظيم البيانات.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="verify.html" class="btn btn-primary">
+          <span>⌕</span>
+          <span data-i18n="verifyBtn">التحقق من الهوية</span>
+        </a>
+
+        <a href="admin.html" class="btn btn-outline">
+          <span>▣</span>
+          <span data-i18n="adminBtn">لوحة المشرف</span>
+        </a>
+      </div>
+
+      <p class="hero-note" data-i18n="heroNote">
+        مشروع تجريبي مستقل – لا يمثل نظاماً حكومياً معتمداً.
+      </p>
+
+    </div>
+
+    <div class="visual-area" aria-label="تصميم توضيحي لبطاقة الهوية">
+
+      <div class="card-stack">
+
+        <div class="mock-card mock-front">
+          <div class="mock-head">
+            <div>
+              <strong data-i18n="mockTitle">الهوية الوظيفية الصحية</strong>
+              <small>HEALTH EMPLOYEE ID</small>
+            </div>
+            <div class="mock-symbol">✚</div>
+          </div>
+
+          <div class="mock-body">
+            <div class="mock-photo">👤</div>
+            <div class="mock-lines">
+              <div class="mock-line large"></div>
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mock-card mock-back">
+          <div class="mock-back-content">
+            <div class="mock-qr"></div>
+            <strong data-i18n="mockVerify">التحقق من الهوية</strong>
+            <span>SCAN QR TO VERIFY</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+
+<section class="content-section" id="about">
+  <div class="container">
+
+    <div class="section-heading">
+      <span class="tag" data-i18n="aboutTag">نبذة عن المشروع</span>
+      <h2 data-i18n="aboutTitle">ما هو نظام الهوية الوظيفية الصحية؟</h2>
+      <p data-i18n="aboutDesc">
+        نظام تجريبي يهدف إلى تقديم نموذج إلكتروني لإدارة الهوية الوظيفية وإتاحة التحقق من صلاحيتها باستخدام رمز QR.
+      </p>
+    </div>
+
+    <div class="features-grid">
+
+      <article class="feature-card">
+        <div class="feature-icon">▣</div>
+        <h3 data-i18n="aboutCard1Title">هوية رقمية منظمة</h3>
+        <p data-i18n="aboutCard1Desc">
+          عرض منظم للبيانات الوظيفية الأساسية ضمن نموذج بطاقة قابل للمعاينة والطباعة.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">⌕</div>
+        <h3 data-i18n="aboutCard2Title">تحقق عبر QR</h3>
+        <p data-i18n="aboutCard2Desc">
+          إتاحة الوصول إلى صفحة تحقق عامة لمعرفة حالة الهوية دون عرض البيانات الشخصية الحساسة.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">⌘</div>
+        <h3 data-i18n="aboutCard3Title">إدارة مركزية تجريبية</h3>
+        <p data-i18n="aboutCard3Desc">
+          واجهة مخصصة للمشرفين المصرح لهم لإدخال البيانات وإصدار الهويات.
+        </p>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+
+<section class="content-section steps-section" id="features">
+  <div class="container">
+
+    <div class="section-heading">
+      <span class="tag" data-i18n="featuresTag">خصائص المنصة</span>
+      <h2 data-i18n="featuresTitle">مميزات النظام</h2>
+      <p data-i18n="featuresDesc">
+        مجموعة من الخصائص المصممة لتقديم تجربة استخدام واضحة ومنظمة.
+      </p>
+    </div>
+
+    <div class="features-grid">
+
+      <article class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3 data-i18n="feature1Title">دخول المشرفين</h3>
+        <p data-i18n="feature1Desc">
+          تسجيل دخول يعتمد على خدمة المصادقة وتحقق الصلاحيات من الخادم.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3 data-i18n="feature2Title">رمز QR</h3>
+        <p data-i18n="feature2Desc">
+          ربط البطاقة بصفحة تحقق إلكترونية من خلال رمز مخصص لكل هوية.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3 data-i18n="feature3Title">لغتان</h3>
+        <p data-i18n="feature3Desc">
+          واجهة تدعم العربية والإنجليزية لتسهيل الاستخدام.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">🖨️</div>
+        <h3 data-i18n="feature4Title">معاينة وطباعة</h3>
+        <p data-i18n="feature4Desc">
+          معاينة وجهي البطاقة وتجهيزها للطباعة بمقاس CR80.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3 data-i18n="feature5Title">تقليل كشف البيانات</h3>
+        <p data-i18n="feature5Desc">
+          صفحة التحقق العامة مصممة لإظهار حالة الهوية دون كشف تفاصيل الموظف الخاصة.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3 data-i18n="feature6Title">بنية قابلة للتطوير</h3>
+        <p data-i18n="feature6Desc">
+          تصميم تقني يسمح بإضافة وظائف إدارية أخرى بعد تنفيذها واختبارها.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+
+<section class="content-section" id="how">
+  <div class="container">
+
+    <div class="section-heading">
+      <span class="tag" data-i18n="howTag">خطوات الاستخدام</span>
+      <h2 data-i18n="howTitle">كيف يعمل النظام؟</h2>
+      <p data-i18n="howDesc">
+        رحلة مبسطة من إصدار الهوية إلى التحقق من حالتها.
+      </p>
+    </div>
+
+    <div class="steps-grid">
+
+      <article class="step">
+        <div class="step-number">01</div>
+        <h3 data-i18n="step1Title">إدخال البيانات</h3>
+        <p data-i18n="step1Desc">
+          يقوم المشرف المصرح له بإدخال بيانات الموظف والهوية.
+        </p>
+      </article>
+
+      <article class="step">
+        <div class="step-number">02</div>
+        <h3 data-i18n="step2Title">إصدار البطاقة</h3>
+        <p data-i18n="step2Desc">
+          تُنشأ الهوية ويرتبط بها رمز تحقق مخصص.
+        </p>
+      </article>
+
+      <article class="step">
+        <div class="step-number">03</div>
+        <h3 data-i18n="step3Title">مسح رمز QR</h3>
+        <p data-i18n="step3Desc">
+          يستطيع المستخدم فتح صفحة التحقق لمعرفة حالة الهوية.
+        </p>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+
+<section class="content-section steps-section" id="services">
+  <div class="container">
+
+    <div class="section-heading">
+      <span class="tag" data-i18n="servicesTag">الوصول إلى الخدمات</span>
+      <h2 data-i18n="servicesTitle">ابدأ باستخدام النظام</h2>
+      <p data-i18n="servicesDesc">
+        اختر الخدمة التي ترغب في الوصول إليها.
+      </p>
+    </div>
+
+    <div class="services-grid">
+
+      <article class="service-card">
+        <div class="service-icon">⌕</div>
+        <div>
+          <h3 data-i18n="verifyTitle">التحقق من الهوية</h3>
+          <p data-i18n="verifyDesc">
+            انتقل إلى صفحة التحقق العامة للتحقق من حالة الهوية باستخدام رمز التحقق.
+          </p>
+          <a href="verify.html" class="btn btn-primary">
+            <span data-i18n="openVerify">فتح صفحة التحقق</span>
+            <span>←</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-icon">▣</div>
+        <div>
+          <h3 data-i18n="adminTitle">لوحة إدارة المشرف</h3>
+          <p data-i18n="adminDesc">
+            مساحة مخصصة للمشرف المصرح له لإصدار الهوية وإدارة عملية الإدخال.
+          </p>
+          <a href="admin.html" class="btn btn-dark">
+            <span data-i18n="openAdmin">دخول لوحة المشرف</span>
+            <span>←</span>
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIMENTAL DISCLAIMER -->
+
+<section class="notice-wrap">
+  <div class="container">
+    <div class="notice-box">
+      <div class="notice-symbol">⚠️</div>
+      <div>
+        <strong data-i18n="noticeTitle">تنويه مهم حول طبيعة المشروع</strong>
+        <p data-i18n="noticeDesc">
+          هذا المشروع نموذج تجريبي مستقل لأغراض التطوير والاختبار والعرض التقني فقط. لا يمثل منصة رسمية لوزارة الصحة العراقية أو أي جهة حكومية، ولا يثبت بمفرده الصفة الوظيفية أو صحة أي وثيقة. يجب الرجوع إلى الجهة المختصة للتحقق الرسمي.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALL TO ACTION -->
+
+<section class="container">
+  <div class="cta">
+    <div>
+      <h2 data-i18n="ctaTitle">التحقق يبدأ بخطوة واحدة</h2>
+      <p data-i18n="ctaDesc">انتقل إلى صفحة التحقق وابدأ تجربة النظام.</p>
+    </div>
+
+    <a href="verify.html" class="btn btn-primary">
+      <span data-i18n="ctaButton">الانتقال إلى التحقق</span>
+      <span>←</span>
+    </a>
+  </div>
+</section>
+
 </main>
 
+<!-- FOOTER -->
+
 <footer>
-  نظام تجريبي مستقل – غير معتمد رسمياً من وزارة الصحة
-  <br>
-  Healthcare Employee Identity System – Experimental
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <div class="footer-brand" data-i18n="footerBrand">
+          نظام الهوية الوظيفية الصحية
+        </div>
+        <p data-i18n="footerDesc">
+          منصة تجريبية مستقلة لإدارة والتحقق من الهوية الوظيفية الصحية.
+        </p>
+      </div>
+
+      <div>
+        <h3 data-i18n="quickLinks">روابط سريعة</h3>
+        <a href="#home" data-i18n="home">الرئيسية</a>
+        <a href="#about" data-i18n="about">عن النظام</a>
+        <a href="#features" data-i18n="features">المميزات</a>
+      </div>
+
+      <div>
+        <h3 data-i18n="platform">المنصة</h3>
+        <a href="verify.html" data-i18n="verifyTitle">التحقق من الهوية</a>
+        <a href="admin.html" data-i18n="adminTitle">لوحة المشرف</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span data-i18n="copyright">
+        © 2026 – نظام تجريبي مستقل. جميع الحقوق محفوظة.
+      </span>
+    </div>
+
+  </div>
 </footer>
+
+<script>
+"use strict";
+
+/* =====================================================
+   LANGUAGE DICTIONARY
+===================================================== */
+
+const dictionary = {
+  ar: {
+    brand: "نظام الهوية الوظيفية الصحية",
+    brandSub: "منصة تجريبية للتحقق الإلكتروني",
+    home: "الرئيسية",
+    about: "عن النظام",
+    features: "المميزات",
+    how: "آلية العمل",
+    services: "الخدمات",
+
+    heroTag: "منصة رقمية تجريبية مستقلة",
+    heroTitle: 'الهوية الوظيفية الصحية<br><span>بمفهوم رقمي أكثر تطوراً</span>',
+    heroDesc: "واجهة تجريبية لإدارة بيانات الهوية الوظيفية وإتاحة التحقق من حالتها عبر رمز QR، من خلال تجربة رقمية تجمع بين سهولة الاستخدام وتنظيم البيانات.",
+    verifyBtn: "التحقق من الهوية",
+    adminBtn: "لوحة المشرف",
+    heroNote: "مشروع تجريبي مستقل – لا يمثل نظاماً حكومياً معتمداً.",
+    mockTitle: "الهوية الوظيفية الصحية",
+    mockVerify: "التحقق من الهوية",
+
+    aboutTag: "نبذة عن المشروع",
+    aboutTitle: "ما هو نظام الهوية الوظيفية الصحية؟",
+    aboutDesc: "نظام تجريبي يهدف إلى تقديم نموذج إلكتروني لإدارة الهوية الوظيفية وإتاحة التحقق من صلاحيتها باستخدام رمز QR.",
+    aboutCard1Title: "هوية رقمية منظمة",
+    aboutCard1Desc: "عرض منظم للبيانات الوظيفية الأساسية ضمن نموذج بطاقة قابل للمعاينة والطباعة.",
+    aboutCard2Title: "تحقق عبر QR",
+    aboutCard2Desc: "إتاحة الوصول إلى صفحة تحقق عامة لمعرفة حالة الهوية دون عرض البيانات الشخصية الحساسة.",
+    aboutCard3Title: "إدارة مركزية تجريبية",
+    aboutCard3Desc: "واجهة مخصصة للمشرفين المصرح لهم لإدخال البيانات وإصدار الهويات.",
+
+    featuresTag: "خصائص المنصة",
+    featuresTitle: "مميزات النظام",
+    featuresDesc: "مجموعة من الخصائص المصممة لتقديم تجربة استخدام واضحة ومنظمة.",
+    feature1Title: "دخول المشرفين",
+    feature1Desc: "تسجيل دخول يعتمد على خدمة المصادقة وتحقق الصلاحيات من الخادم.",
+    feature2Title: "رمز QR",
+    feature2Desc: "ربط البطاقة بصفحة تحقق إلكترونية من خلال رمز مخصص لكل هوية.",
+    feature3Title: "لغتان",
+    feature3Desc: "واجهة تدعم العربية والإنجليزية لتسهيل الاستخدام.",
+    feature4Title: "معاينة وطباعة",
+    feature4Desc: "معاينة وجهي البطاقة وتجهيزها للطباعة بمقاس CR80.",
+    feature5Title: "تقليل كشف البيانات",
+    feature5Desc: "صفحة التحقق العامة مصممة لإظهار حالة الهوية دون كشف تفاصيل الموظف الخاصة.",
+    feature6Title: "بنية قابلة للتطوير",
+    feature6Desc: "تصميم تقني يسمح بإضافة وظائف إدارية أخرى بعد تنفيذها واختبارها.",
+
+    howTag: "خطوات الاستخدام",
+    howTitle: "كيف يعمل النظام؟",
+    howDesc: "رحلة مبسطة من إصدار الهوية إلى التحقق من حالتها.",
+    step1Title: "إدخال البيانات",
+    step1Desc: "يقوم المشرف المصرح له بإدخال بيانات الموظف والهوية.",
+    step2Title: "إصدار البطاقة",
+    step2Desc: "تُنشأ الهوية ويرتبط بها رمز تحقق مخصص.",
+    step3Title: "مسح رمز QR",
+    step3Desc: "يستطيع المستخدم فتح صفحة التحقق لمعرفة حالة الهوية.",
+
+    servicesTag: "الوصول إلى الخدمات",
+    servicesTitle: "ابدأ باستخدام النظام",
+    servicesDesc: "اختر الخدمة التي ترغب في الوصول إليها.",
+    verifyTitle: "التحقق من الهوية",
+    verifyDesc: "انتقل إلى صفحة التحقق العامة للتحقق من حالة الهوية باستخدام رمز التحقق.",
+    openVerify: "فتح صفحة التحقق",
+    adminTitle: "لوحة إدارة المشرف",
+    adminDesc: "مساحة مخصصة للمشرف المصرح له لإصدار الهوية وإدارة عملية الإدخال.",
+    openAdmin: "دخول لوحة المشرف",
+
+    noticeTitle: "تنويه مهم حول طبيعة المشروع",
+    noticeDesc: "هذا المشروع نموذج تجريبي مستقل لأغراض التطوير والاختبار والعرض التقني فقط. لا يمثل منصة رسمية لوزارة الصحة العراقية أو أي جهة حكومية، ولا يثبت بمفرده الصفة الوظيفية أو صحة أي وثيقة. يجب الرجوع إلى الجهة المختصة للتحقق الرسمي.",
+
+    ctaTitle: "التحقق يبدأ بخطوة واحدة",
+    ctaDesc: "انتقل إلى صفحة التحقق وابدأ تجربة النظام.",
+    ctaButton: "الانتقال إلى التحقق",
+
+    footerBrand: "نظام الهوية الوظيفية الصحية",
+    footerDesc: "منصة تجريبية مستقلة لإدارة والتحقق من الهوية الوظيفية الصحية.",
+    quickLinks: "روابط سريعة",
+    platform: "المنصة",
+    copyright: "© 2026 – نظام تجريبي مستقل. جميع الحقوق محفوظة."
+  },
+
+  en: {
+    brand: "Health Employee Identity System",
+    brandSub: "Experimental electronic verification platform",
+    home: "Home",
+    about: "About",
+    features: "Features",
+    how: "How it works",
+    services: "Services",
+
+    heroTag: "Independent Experimental Digital Platform",
+    heroTitle: 'Health Employee Identity<br><span>A More Advanced Digital Experience</span>',
+    heroDesc: "An experimental interface for managing employee identity records and checking identity status through QR codes, combining ease of use with organized data.",
+    verifyBtn: "Verify Identity",
+    adminBtn: "Admin Panel",
+    heroNote: "Independent experimental project – not an approved government system.",
+    mockTitle: "HEALTH EMPLOYEE ID",
+    mockVerify: "IDENTITY VERIFICATION",
+
+    aboutTag: "ABOUT THE PROJECT",
+    aboutTitle: "What is the Health Employee Identity System?",
+    aboutDesc: "An experimental model for managing employee identities and enabling status checks through QR codes.",
+    aboutCard1Title: "Organized Digital Identity",
+    aboutCard1Desc: "Structured presentation of basic employment information in a card layout ready for preview and printing.",
+    aboutCard2Title: "QR Verification",
+    aboutCard2Desc: "Access a public verification page to check identity status without exposing sensitive personal information.",
+    aboutCard3Title: "Experimental Administration",
+    aboutCard3Desc: "An interface for authorized administrators to enter data and issue identities.",
+
+    featuresTag: "PLATFORM FEATURES",
+    featuresTitle: "System Features",
+    featuresDesc: "A collection of features designed to provide a clear and organized user experience.",
+    feature1Title: "Administrator Access",
+    feature1Desc: "Authentication and server-side authorization checks.",
+    feature2Title: "QR Code",
+    feature2Desc: "Connect each card to an electronic verification page through a dedicated identity token.",
+    feature3Title: "Bilingual Interface",
+    feature3Desc: "Arabic and English interface support.",
+    feature4Title: "Preview and Printing",
+    feature4Desc: "Preview both card sides and prepare them for CR80 printing.",
+    feature5Title: "Reduced Data Exposure",
+    feature5Desc: "The public verification page is designed to show identity status without exposing private employee details.",
+    feature6Title: "Expandable Architecture",
+    feature6Desc: "A technical structure that can support additional administrative functions after implementation and testing.",
+
+    howTag: "USER GUIDE",
+    howTitle: "How Does It Work?",
+    howDesc: "A simplified journey from issuing an identity to checking its status.",
+    step1Title: "Enter Information",
+    step1Desc: "An authorized administrator enters employee and identity details.",
+    step2Title: "Issue the Card",
+    step2Desc: "An identity record is created and linked to a dedicated verification token.",
+    step3Title: "Scan QR Code",
+    step3Desc: "The user opens the verification page to check identity status.",
+
+    servicesTag: "ACCESS SERVICES",
+    servicesTitle: "Start Using the System",
+    servicesDesc: "Choose the service you want to access.",
+    verifyTitle: "Identity Verification",
+    verifyDesc: "Open the public verification page to check identity status using a verification token.",
+    openVerify: "Open Verification",
+    adminTitle: "Administrator Panel",
+    adminDesc: "A dedicated space for authorized administrators to issue identities and manage data entry.",
+    openAdmin: "Open Admin Panel",
+
+    noticeTitle: "Important Project Disclaimer",
+    noticeDesc: "This is an independent experimental project for development, testing, and technical demonstration only. It is not an official platform of the Iraqi Ministry of Health or any government entity. It does not independently prove employment status or document authenticity. Official verification must be obtained from the competent authority.",
+
+    ctaTitle: "Verification Starts with One Step",
+    ctaDesc: "Open the verification page and explore the system.",
+    ctaButton: "Go to Verification",
+
+    footerBrand: "Health Employee Identity System",
+    footerDesc: "An independent experimental platform for managing and verifying health employee identities.",
+    quickLinks: "Quick Links",
+    platform: "Platform",
+    copyright: "© 2026 – Independent Experimental System. All rights reserved."
+  }
+};
+
+/* =====================================================
+   LANGUAGE HANDLER
+===================================================== */
+
+let currentLanguage = "ar";
+
+function setLanguage(lang) {
+  if (!dictionary[lang]) return;
+
+  currentLanguage = lang;
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+    const key = element.getAttribute("data-i18n");
+    if (Object.prototype.hasOwnProperty.call(dictionary[lang], key)) {
+      element.textContent = dictionary[lang][key];
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-html]").forEach(element => {
+    const key = element.getAttribute("data-i18n-html");
+    if (Object.prototype.hasOwnProperty.call(dictionary[lang], key)) {
+      // Only fixed, developer-authored translations are inserted here.
+      element.innerHTML = dictionary[lang][key];
+    }
+  });
+
+  document.getElementById("languageBtn").textContent =
+    lang === "ar" ? "English" : "العربية";
+
+  document.title = lang === "ar"
+    ? "نظام الهوية الوظيفية الصحية | Health ID"
+    : "Health Employee Identity System | Health ID";
+
+  closeMenu();
+}
+
+document.getElementById("languageBtn").addEventListener("click", () => {
+  setLanguage(currentLanguage === "ar" ? "en" : "ar");
+});
+
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+function closeMenu() {
+  navLinks.classList.remove("open");
+  menuBtn.setAttribute("aria-expanded", "false");
+}
+
+menuBtn.addEventListener("click", () => {
+  const isOpen = navLinks.classList.toggle("open");
+  menuBtn.setAttribute("aria-expanded", String(isOpen));
+});
+
+navLinks.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", closeMenu);
+});
+
+/* =====================================================
+   SMOOTH SCROLL FOR INTERNAL LINKS
+===================================================== */
+
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener("click", event => {
+    const targetId = link.getAttribute("href");
+    const target = document.querySelector(targetId);
+
+    if (!target) return;
+
+    event.preventDefault();
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
+});
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+setLanguage("ar");
+</script>
 
 </body>
 </html>

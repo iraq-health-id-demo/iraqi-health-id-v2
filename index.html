@@ -1,21 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#087f72">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Health ID">
-<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#087f72">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Health ID">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#073b50">
 
   <title>نظام الهوية الوظيفية الصحية | Health ID</title>
-
   <meta name="description" content="منصة تجريبية لإدارة والتحقق من الهوية الوظيفية الصحية إلكترونياً.">
   <meta name="robots" content="index,follow">
 
@@ -56,16 +53,6 @@
       line-height: 1.8;
       overflow-x: hidden;
     }
-    <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js", { scope: "./" })
-      .catch((error) => {
-        console.error("Service Worker registration failed:", error);
-      });
-  });
-}
-</script>
 
     a {
       text-decoration: none;
@@ -428,7 +415,9 @@ if ("serviceWorker" in navigator) {
       background: #07516a;
     }
 
-    .mock-line.short { width: 45%; }
+    .mock-line.short {
+      width: 45%;
+    }
 
     .mock-back-content {
       position: relative;
@@ -534,8 +523,7 @@ if ("serviceWorker" in navigator) {
       font-size: 12px;
       line-height: 2;
     }
-
-    /* HOW IT WORKS */
+        /* HOW IT WORKS */
 
     .steps-section {
       background: var(--bg);
@@ -617,6 +605,37 @@ if ("serviceWorker" in navigator) {
       color: var(--muted);
       font-size: 12px;
       margin-bottom: 14px;
+    }
+
+    /* INSTALL APP */
+
+    .btn-install {
+      background: #087f72;
+      color: white;
+      border: 1px solid #087f72;
+      cursor: pointer;
+    }
+
+    .btn-install:hover {
+      background: #06665c;
+      transform: translateY(-2px);
+    }
+
+    .install-help {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+      max-width: 440px;
+    }
+
+    .install-help.show {
+      display: block;
     }
 
     /* NOTICE */
@@ -865,6 +884,16 @@ if ("serviceWorker" in navigator) {
           <span>▣</span>
           <span data-i18n="adminBtn">لوحة المشرف</span>
         </a>
+
+        <button class="btn btn-install" id="installAppBtn" type="button">
+          <span>⬇</span>
+          <span data-i18n="installBtn">تثبيت التطبيق</span>
+        </button>
+      </div>
+
+      <div class="install-help" id="installHelp" aria-live="polite">
+        لتثبيت التطبيق، افتح قائمة المتصفح ⋮ ثم اختر
+        «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».
       </div>
 
       <p class="hero-note" data-i18n="heroNote">
@@ -1023,8 +1052,7 @@ if ("serviceWorker" in navigator) {
     </div>
   </div>
 </section>
-
-<!-- HOW IT WORKS -->
+  <!-- HOW IT WORKS -->
 
 <section class="content-section" id="how">
   <div class="container">
@@ -1064,7 +1092,6 @@ if ("serviceWorker" in navigator) {
       </article>
 
     </div>
-
   </div>
 </section>
 
@@ -1112,7 +1139,6 @@ if ("serviceWorker" in navigator) {
       </article>
 
     </div>
-
   </div>
 </section>
 
@@ -1212,6 +1238,8 @@ const dictionary = {
     heroDesc: "واجهة تجريبية لإدارة بيانات الهوية الوظيفية وإتاحة التحقق من حالتها عبر رمز QR، من خلال تجربة رقمية تجمع بين سهولة الاستخدام وتنظيم البيانات.",
     verifyBtn: "التحقق من الهوية",
     adminBtn: "لوحة المشرف",
+    installBtn: "تثبيت التطبيق",
+    installHelpText: "لتثبيت التطبيق، افتح قائمة المتصفح ⋮ ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».",
     heroNote: "مشروع تجريبي مستقل – لا يمثل نظاماً حكومياً معتمداً.",
     mockTitle: "الهوية الوظيفية الصحية",
     mockVerify: "التحقق من الهوية",
@@ -1290,6 +1318,8 @@ const dictionary = {
     heroDesc: "An experimental interface for managing employee identity records and checking identity status through QR codes, combining ease of use with organized data.",
     verifyBtn: "Verify Identity",
     adminBtn: "Admin Panel",
+    installBtn: "Install App",
+    installHelpText: "To install the app, open your browser menu ⋮ and choose Install app or Add to Home screen.",
     heroNote: "Independent experimental project – not an approved government system.",
     mockTitle: "HEALTH EMPLOYEE ID",
     mockVerify: "IDENTITY VERIFICATION",
@@ -1371,6 +1401,7 @@ function setLanguage(lang) {
 
   document.querySelectorAll("[data-i18n]").forEach(element => {
     const key = element.getAttribute("data-i18n");
+
     if (Object.prototype.hasOwnProperty.call(dictionary[lang], key)) {
       element.textContent = dictionary[lang][key];
     }
@@ -1378,8 +1409,8 @@ function setLanguage(lang) {
 
   document.querySelectorAll("[data-i18n-html]").forEach(element => {
     const key = element.getAttribute("data-i18n-html");
+
     if (Object.prototype.hasOwnProperty.call(dictionary[lang], key)) {
-      // Only fixed, developer-authored translations are inserted here.
       element.innerHTML = dictionary[lang][key];
     }
   });
@@ -1393,6 +1424,10 @@ function setLanguage(lang) {
 
   closeMenu();
 }
+
+/* =====================================================
+   LANGUAGE BUTTON
+===================================================== */
 
 document.getElementById("languageBtn").addEventListener("click", () => {
   setLanguage(currentLanguage === "ar" ? "en" : "ar");
@@ -1420,7 +1455,7 @@ navLinks.querySelectorAll("a").forEach(link => {
 });
 
 /* =====================================================
-   SMOOTH SCROLL FOR INTERNAL LINKS
+   SMOOTH SCROLL
 ===================================================== */
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -1431,6 +1466,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     if (!target) return;
 
     event.preventDefault();
+
     target.scrollIntoView({
       behavior: "smooth",
       block: "start"
@@ -1439,11 +1475,93 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 /* =====================================================
+   INSTALL APP
+===================================================== */
+
+let deferredInstallPrompt = null;
+
+const installButton = document.getElementById("installAppBtn");
+const installHelp = document.getElementById("installHelp");
+
+function showInstallHelp() {
+  const message = dictionary[currentLanguage].installHelpText;
+
+  installHelp.textContent = message;
+  installHelp.classList.add("show");
+}
+
+function isAppInstalled() {
+  return window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+}
+
+if (isAppInstalled()) {
+  installButton.style.display = "none";
+  installHelp.classList.remove("show");
+}
+
+window.addEventListener("beforeinstallprompt", event => {
+  event.preventDefault();
+
+  deferredInstallPrompt = event;
+
+  installButton.style.display = "inline-flex";
+  installHelp.classList.remove("show");
+});
+
+installButton.addEventListener("click", async () => {
+
+  if (isAppInstalled()) {
+    installButton.style.display = "none";
+    return;
+  }
+
+  if (!deferredInstallPrompt) {
+    showInstallHelp();
+    return;
+  }
+
+  deferredInstallPrompt.prompt();
+
+  const result = await deferredInstallPrompt.userChoice;
+
+  if (result.outcome === "accepted") {
+    installHelp.classList.remove("show");
+  }
+
+  deferredInstallPrompt = null;
+});
+
+window.addEventListener("appinstalled", () => {
+  installButton.style.display = "none";
+  installHelp.classList.remove("show");
+  deferredInstallPrompt = null;
+});
+
+/* =====================================================
    INITIALIZE
 ===================================================== */
 
 setLanguage("ar");
+
+</script>
+
+<!-- SERVICE WORKER REGISTRATION -->
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(registration => {
+        console.log("Service Worker registered:", registration.scope);
+      })
+      .catch(error => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
+}
 </script>
 
 </body>
 </html>
+  

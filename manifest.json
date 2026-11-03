@@ -1,0 +1,59 @@
+
+{
+  "id": "/iraqi-health-id-v2/",
+  "name": "الهوية الصحية - Health ID",
+  "short_name": "Health ID",
+  "description": "منصة تجريبية لإدارة الهوية الوظيفية الصحية والتحقق من صلاحيتها وأصالتها إلكترونياً.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/iraqi-health-id-v2/index.html",
+  "scope": "/iraqi-health-id-v2/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "background_color": "#F4FAFA",
+  "theme_color": "#087F8C",
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/iraqi-health-id-v2/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/iraqi-health-id-v2/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/iraqi-health-id-v2/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "التحقق من الهوية",
+      "short_name": "التحقق",
+      "description": "فتح صفحة التحقق من الهوية الوظيفية",
+      "url": "/iraqi-health-id-v2/verify.html"
+    },
+    {
+      "name": "لوحة الإدارة",
+      "short_name": "الإدارة",
+      "description": "فتح لوحة إدارة النظام",
+      "url": "/iraqi-health-id-v2/admin.html"
+    }
+  ]
+}
